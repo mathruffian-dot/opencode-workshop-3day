@@ -97,9 +97,11 @@
     <div class="card k"><div class="t">② 一份可直接用的教材包</div><div class="d">上網抓素材、讀檔生教案、整理檔案，全部本機完成</div></div>
     <div class="card k"><div class="t">③ 教材自動產線</div><div class="d">教材丟進去，簡報、音訊、逐字稿自己長出來</div></div>
     <div class="card k"><div class="t">④ 會存資料的課堂工具</div><div class="d">學生在手機上填，資料存得住、看得到</div></div>
-    <div class="card k"><div class="t">⑤ 你自己的 AI 小應用</div><div class="d">用 API 金鑰做一個前端加後端的工具</div></div>
-    <div class="card k"><div class="t">⑥ 大專案</div><div class="d">把前面全部接起來，做一個你真的會帶回教室的東西</div></div>
+    <div class="card k"><div class="t">⑤ 把 API 變成自己的工具</div><div class="d">拿一把免費金鑰，做一個你自己天天用得到的東西</div></div>
+    <div class="card k"><div class="t">⑥ 把工具變成學生打得開的網頁</div><div class="d">同一個工具加上前端與後端，學生掃 QR Code 就能用</div></div>
   </div>
+
+  <p class="lead">⑤ 和 ⑥ 不是兩個獨立作品，是<strong>同一個作品的上下半部</strong>：第三天上午先讓它在你自己的電腦裡跑順，下午才把它變成學生打得開的網頁。</p>
 
   <div class="warn">
     <strong>開始之前，我們會先問你一件事：</strong>你現在教學上最痛的是什麼？想解決什麼問題？<br>
@@ -119,6 +121,10 @@
   <div class="warn">
     <strong>不需要</strong>事先安裝任何軟體，也<strong>不需要</strong>付費訂閱。三天用到的服務全部有免費方案，而且不用綁信用卡。
   </div>
+  <div class="warn">
+    <strong>先跟你說一聲：</strong>第一天晚上會請大家花三分鐘註冊一個 <strong>Netlify</strong> 帳號，然後<strong>記得去信箱把驗證信按掉</strong>。<br>
+    不是要給你功課，是先卡位——學校信箱有時候會延遲幾分鐘才收得到信，而第二天上午就會用到它。前一晚弄好，隔天你就不用坐在那邊等信。
+  </div>
 </section>
 
 <section>
@@ -137,40 +143,40 @@
     <img src="images/02-internal-tools.png" alt="Day 1 下午 內部工具">
     <div class="hd"><span class="no">Day 1 下午</span><span class="ti">內部工具</span></div>
     <p>不接任何外部服務，純粹用 AI 內建的手腳做事：上網找素材、讀你的教材、產出教案、整理一團亂的資料夾。中間會裝一包工具，裝完你會當場<strong>聽到電腦講中文</strong>。</p>
-    <div class="out"><div class="lbl">你會帶走</div>作品② — 一份可以直接拿去用的教材包<br><span style="color:var(--muted);font-size:.9em">回家功課：把「找素材」這條流程包成你的第一個技能</span></div>
+    <div class="out"><div class="lbl">你會帶走</div>作品② — 一份可以直接拿去用的教材包<br><span style="color:var(--muted);font-size:.9em">回家功課：① 把「找素材」這條流程包成你的第一個技能　② 順手註冊 Netlify、把驗證信按掉（明天上午會用到）</span></div>
     <div class="tools"><span>文件處理工具</span><span>影音工具</span><span>語音合成</span><span>雲端硬碟</span></div>
   </div>
 
   <div class="day">
     <img src="images/03-external-tools.png" alt="Day 2 上午 外部工具">
     <div class="hd"><span class="no">Day 2 上午</span><span class="ti">外部工具</span></div>
-    <p>讓 AI 伸手到你的電腦以外。我們會走兩條不同的通道——一條要授權登入，一條完全不用帳號——並且講清楚<strong>什麼時候卡住你的不是程式，是授權</strong>。</p>
+    <p>讓 AI 伸手到你的電腦以外。我們會走<strong>三條不同的通道</strong>：一條要授權登入（把教材變成簡報和音訊）、一條完全不用帳號（抓影片字幕）、一條把你做的東西<strong>送上網變成一個真的網址</strong>。過程中你會很清楚地感覺到——<strong>很多時候卡住你的不是程式，是授權</strong>。<br>第三條通道請記得它：第三天下午還會再用到一次。</p>
     <div class="out"><div class="lbl">你會帶走</div>作品③ — 一條產線：教材丟進去，簡報、音訊、逐字稿自己出來</div>
-    <div class="tools"><span>NotebookLM</span><span>YouTube 字幕</span><span>Canva（示範）</span></div>
+    <div class="tools"><span>NotebookLM</span><span>YouTube 字幕</span><span>Netlify 部署</span><span>QR Code</span></div>
   </div>
 
   <div class="day">
     <img src="images/04-database.png" alt="Day 2 下午 資料庫">
     <div class="hd"><span class="no">Day 2 下午</span><span class="ti">資料庫</span></div>
-    <p>先把前兩天的能力收成一個可以重複使用的技能，然後開始讓你的工具「記得住東西」。你會看到三種等級的差別，並且知道<strong>什麼時候根本不需要資料庫</strong>。</p>
+    <p>先把前兩天的能力收成一個可以重複使用的技能，然後開始讓你的工具「記得住東西」。主線是用 <strong>Apps Script 做一個網頁應用程式，資料存進你自己的 Google 試算表</strong>——學生掃 QR Code 填，你在試算表裡直接看得到，不用另外學任何後台。<br>想做「幾十個人同時送、大螢幕即時長出來」的，可以再往上一階去碰 Supabase，那是<strong>選配路線</strong>，不是每個人都要走。這個半天你也會知道<strong>什麼時候根本不需要資料庫</strong>。</p>
     <div class="out"><div class="lbl">你會帶走</div>作品④ — 一個學生用手機就能填、資料存得住的課堂工具</div>
-    <div class="tools"><span>Apps Script</span><span>Google 試算表</span><span>Supabase</span><span>GitHub（開始備份）</span></div>
+    <div class="tools"><span>Apps Script 網頁應用程式</span><span>Google 試算表</span><span>QR Code</span><span>GitHub（開始備份）</span><span>Supabase（選配）</span></div>
   </div>
 
   <div class="day">
     <img src="images/05-api.png" alt="Day 3 上午 API">
     <div class="hd"><span class="no">Day 3 上午</span><span class="ti">API 金鑰</span></div>
-    <p>這一段最重要的價值是：<strong>學生不用申請帳號</strong>。金鑰放在後端，老師把工具派給學生，繞開年齡限制和帳號管理。我們會先拿它轉字幕、清逐字稿，再進到寫一個真正的前端加後端小應用。</p>
-    <div class="out"><div class="lbl">你會帶走</div>作品⑤ — 一個用 AI 服務驅動的小工具，金鑰安全放在後端</div>
-    <div class="tools"><span>Groq 免費金鑰</span><span>語音轉文字</span><span>文字清洗</span></div>
+    <p>這一段最重要的價值是：<strong>學生不用申請帳號</strong>。金鑰在你手上，老師把工具派給學生用，繞開年齡限制和帳號管理。<br>上午我們<strong>只在你自己的電腦裡用它，還不碰網頁</strong>——批次把錄音影片轉成字幕、把逐字稿清成能直接發下去的講義。先讓這把鑰匙在你手上跑順，網頁留到下午。</p>
+    <div class="out"><div class="lbl">你會帶走</div>作品⑤ — 一個你自己天天用得到的 AI 工具（驗收標準：換一份新素材，同一句話能不能再跑一次）</div>
+    <div class="tools"><span>Groq 免費金鑰</span><span>語音轉文字</span><span>文字清洗</span><span>重寫一次你的痛點</span></div>
   </div>
 
   <div class="day">
     <img src="images/06-teaching-app.png" alt="Day 3 下午 教學應用">
     <div class="hd"><span class="no">Day 3 下午</span><span class="ti">教學應用</span></div>
-    <p>把前面全部接起來，做一個你真的會帶回教室的東西，然後上台講三分鐘。最後我們會談<strong>回學校之後怎麼繼續</strong>——包括資安底線，以及哪些事該留給人做。</p>
-    <div class="out"><div class="lbl">你會帶走</div>作品⑥ — 一個完整的教學應用，以及一套回校後能自己走下去的方法</div>
-    <div class="tools"><span>整合實作</span><span>成果發表</span><span>第二大腦</span></div>
+    <p>把上午那個「只有你會用」的工具，變成<strong>學生打得開的網頁</strong>——前端加後端。我們會當場按 F12，把寫死在網頁裡的金鑰抓出來給你看；然後用後端函式把它藏好，再抓一次——這次抓不到了。<br>做完上台發表。<strong>每個人開場先唸一次自己第一天寫的痛點</strong>，再講你做了什麼——那個落差就是這三天。最後談<strong>回學校之後怎麼繼續</strong>，包括資安底線，以及哪些事該留給人做。</p>
+    <div class="out"><div class="lbl">你會帶走</div>作品⑥ — 一個學生掃 QR Code 就能打開的教學應用，金鑰安全地藏在後端，以及一套回校後能自己走下去的方法</div>
+    <div class="tools"><span>前端＋後端</span><span>後端函式藏金鑰</span><span>成果發表</span><span>第二大腦</span></div>
   </div>
 </section>
 
@@ -185,15 +191,21 @@
         <tr><td>免費模型</td><td>讓 OpenCode 有大腦</td><td>要（免費，不綁卡）</td></tr>
         <tr><td>GitHub</td><td>作品備份與版本歷史</td><td>要（免費）</td></tr>
         <tr><td>Google 帳號</td><td>試算表、Apps Script、NotebookLM</td><td>用你自己的個人 Gmail</td></tr>
-        <tr><td>Supabase</td><td>多人即時資料庫</td><td>要（免費，不綁卡）</td></tr>
+        <tr><td>Netlify</td><td>把你做的網頁與後端放上網，拿到一個真的網址</td><td>要（免費，不綁卡）<br><span style="color:var(--hi)">第一天晚上先註冊好</span></td></tr>
         <tr><td>Groq</td><td>AI 服務金鑰（轉字幕、文字處理）</td><td>要（免費，不綁卡）</td></tr>
         <tr><td>雲端硬碟</td><td>作品同步，換電腦不怕</td><td>你本來就有</td></tr>
+        <tr><td>Supabase<br><span style="color:var(--muted);font-size:.9em">進階選配</span></td><td>只有想做「多人同時送、即時更新」的人才需要</td><td>要（免費，不綁卡）</td></tr>
       </tbody>
     </table>
   </div>
   <div class="warn">
     <strong>關於隱私，第一天我們就會講清楚：</strong>免費的 AI 模型，官方文件自己寫明<strong>對話資料可能被用來改進模型</strong>，其中有些甚至直接寫「請勿提交個人或機密資料」。<br>
     所以三天實作有一條底線：<strong>只用座號，不用學生姓名</strong>。你自己帶來的教材，上課前請先確認裡面沒有學生名字。
+  </div>
+  <div class="warn">
+    <strong>一個回學校之後會用到的習慣：先發草稿，確認沒問題才正式發布。</strong><br>
+    網頁部署服務的免費方案，<strong>每個月的「正式發布」次數是有限的</strong>，但草稿發布不算次數。所以改一次就正式發布一次，額度會很快用完——用完的時候，你的網站會直接下線，而且訊息不會告訴你原因。<br>
+    這件事在課堂上不會困擾你（三天用不到幾次），但<strong>回學校之後你會自己反覆改</strong>，那時候這個習慣就是你的保險。
   </div>
 </section>
 
