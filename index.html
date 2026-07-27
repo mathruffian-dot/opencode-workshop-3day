@@ -138,8 +138,9 @@
     <strong>不需要</strong>事先安裝任何軟體，也<strong>不需要</strong>付費訂閱。三天用到的服務全部有免費方案，而且不用綁信用卡。
   </div>
   <div class="warn">
-    <strong>先跟你說一聲：</strong>第一天晚上會請大家花三分鐘註冊一個 <strong>Netlify</strong> 帳號，然後<strong>記得去信箱把驗證信按掉</strong>。<br>
-    不是要給你功課，是先卡位——學校信箱有時候會延遲幾分鐘才收得到信，而第二天上午就會用到它。前一晚弄好，隔天你就不用坐在那邊等信。
+    <strong>先跟你說一聲：</strong>第一天晚上會請大家花幾分鐘註冊<strong>兩個</strong>帳號——<strong>Netlify</strong> 和 <strong>GitHub</strong>——然後<strong>記得去信箱把兩封驗證信都按掉</strong>。<br>
+    不是要給你功課，是先卡位——學校信箱有時候會延遲幾分鐘才收得到信，而<strong>第二天上午兩個都會用到</strong>。前一晚弄好，隔天你就不用坐在那邊等信。<br>
+    註冊完就好，<strong>不用做任何設定</strong>，其他的第二天上午一起弄。
   </div>
 </section>
 
@@ -180,24 +181,24 @@
     <img src="images/02-internal-tools.png" alt="Day 1 下午 內部工具">
     <div class="hd"><span class="no">Day 1 下午</span><span class="ti">內部工具</span></div>
     <p>不接任何外部服務，純粹用 AI 內建的手腳做事：上網找素材、讀你的教材、產出教案、整理一團亂的資料夾。中間會裝一包工具，裝完你會當場<strong>聽到電腦講中文</strong>。</p>
-    <div class="out"><div class="lbl">你會帶走</div>作品② — 一份可以直接拿去用的教材包<br><span style="color:var(--muted);font-size:.9em">回家功課：① 把「找素材」這條流程包成你的第一個技能　② 順手註冊 Netlify、把驗證信按掉（明天上午會用到）</span></div>
+    <div class="out"><div class="lbl">你會帶走</div>作品② — 一份可以直接拿去用的教材包<br><span style="color:var(--muted);font-size:.9em">回家功課：① 把「找素材」這條流程包成你的第一個技能　② 順手註冊 Netlify 和 GitHub、把兩封驗證信都按掉（明天上午都會用到）</span></div>
     <div class="tools"><span>文件處理工具</span><span>影音工具</span><span>語音合成</span><span>雲端硬碟</span></div>
   </div>
 
   <div class="day">
     <img src="images/03-external-tools.png" alt="Day 2 上午 外部工具">
     <div class="hd"><span class="no">Day 2 上午</span><span class="ti">外部工具</span></div>
-    <p>讓 AI 伸手到你的電腦以外。我們會走<strong>三條不同的通道</strong>：一條要授權登入（把教材變成簡報和音訊）、一條完全不用帳號（抓影片字幕）、一條把你做的東西<strong>送上網變成一個真的網址</strong>。過程中你會很清楚地感覺到——<strong>很多時候卡住你的不是程式，是授權</strong>。<br>第三條通道請記得它：第三天下午還會再用到一次。</p>
-    <div class="out"><div class="lbl">你會帶走</div>作品③ — 一條產線：教材丟進去，簡報、音訊、逐字稿自己出來</div>
-    <div class="tools"><span>NotebookLM</span><span>YouTube 字幕</span><span>Netlify 部署</span><span>QR Code</span></div>
+    <p>讓 AI 伸手到你的電腦以外。我們會走<strong>四條不同的通道</strong>，而且<strong>每一條要的「授權」都不一樣</strong>：一條要瀏覽器登入（把教材變成簡報和音訊）、一條完全不用帳號（抓影片字幕）、一條把你做的東西<strong>送上網變成一個真的網址</strong>、一條把你的作品<strong>存進你自己的 GitHub</strong>。<br>過程中你會很清楚地感覺到——<strong>很多時候卡住你的不是程式，是授權</strong>。這個半天真正要給你的不是四個服務，是那張<strong>「通道 × 授權」的地圖</strong>：回學校遇到沒教過的服務，你能自己判斷它走哪一條。<br>第三條和第四條請記得：第二天下午和第三天下午都還會再用到。</p>
+    <div class="out"><div class="lbl">你會帶走</div>作品③ — 一條產線：教材丟進去，簡報、音訊、逐字稿自己出來<br><span style="color:var(--muted);font-size:.9em">外加：前三個作品全部備份到你自己的 GitHub，從此救得回三天前那一版</span></div>
+    <div class="tools"><span>NotebookLM</span><span>YouTube 字幕</span><span>Netlify 部署</span><span>GitHub 備份</span><span>QR Code</span></div>
   </div>
 
   <div class="day">
     <img src="images/04-database.png" alt="Day 2 下午 資料庫">
     <div class="hd"><span class="no">Day 2 下午</span><span class="ti">資料庫</span></div>
-    <p>先把前兩天的能力收成一個可以重複使用的技能，然後開始讓你的工具「記得住東西」。主線是用 <strong>Apps Script 做一個網頁應用程式，資料存進你自己的 Google 試算表</strong>——學生掃 QR Code 填，你在試算表裡直接看得到，不用另外學任何後台。<br>想做「幾十個人同時送、大螢幕即時長出來」的，可以再往上一階去碰 Supabase，那是<strong>選配路線</strong>，不是每個人都要走。這個半天你也會知道<strong>什麼時候根本不需要資料庫</strong>。</p>
+    <p>先把前兩天的能力收成一個可以重複使用的技能，然後開始讓你的工具「記得住東西」。主線是用 <strong>Apps Script 做一個網頁應用程式，資料存進你自己的 Google 試算表</strong>——學生掃 QR Code 填，你在試算表裡直接看得到，不用另外學任何後台。<br>想做「幾十個人同時送、大螢幕即時長出來」的，可以再往上一階去碰 Supabase，那是<strong>選配路線</strong>，不是每個人都要走。這個半天你也會知道<strong>什麼時候根本不需要資料庫</strong>。<br>最後十分鐘是<strong>收工存檔</strong>：上午已經把 GitHub 接好了，所以這裡只要一句話就把今天的作品存上去。第三天上午我們會從那裡把它拉回來。</p>
     <div class="out"><div class="lbl">你會帶走</div>作品④ — 一個學生用手機就能填、資料存得住的課堂工具</div>
-    <div class="tools"><span>Apps Script 網頁應用程式</span><span>Google 試算表</span><span>QR Code</span><span>GitHub（開始備份）</span><span>Supabase（選配）</span></div>
+    <div class="tools"><span>Apps Script 網頁應用程式</span><span>Google 試算表</span><span>QR Code</span><span>GitHub（收工存檔）</span><span>Supabase（選配）</span></div>
   </div>
 
   <div class="day">
@@ -242,9 +243,9 @@
     <table>
       <thead><tr><th>服務</th><th>用途</th><th>要註冊嗎</th></tr></thead>
       <tbody>
-        <tr><td>OpenCode</td><td>主要工具，AI 代理人桌面版</td><td>要（免費）</td></tr>
+        <tr><td>OpenCode</td><td>主要工具，AI 代理人桌面版。<a href="https://opencode.ai/download" target="_blank" rel="noopener">官方下載頁</a>（Windows／Mac 都有）</td><td>要（免費）</td></tr>
         <tr><td>免費模型</td><td>讓 OpenCode 有大腦</td><td>要（免費，不綁卡）</td></tr>
-        <tr><td>GitHub</td><td>作品備份與版本歷史</td><td>要（免費）</td></tr>
+        <tr><td>GitHub</td><td>作品備份與版本歷史。第二天上午接起來，之後每天收工存檔</td><td>要（免費，不綁卡）<br><span style="color:var(--hi)">第一天晚上先註冊好</span></td></tr>
         <tr><td>Google 帳號</td><td>試算表、Apps Script、NotebookLM</td><td>用你自己的個人 Gmail</td></tr>
         <tr><td>Netlify</td><td>把你做的網頁與後端放上網，拿到一個真的網址</td><td>要（免費，不綁卡）<br><span style="color:var(--hi)">第一天晚上先註冊好</span></td></tr>
         <tr><td>Groq</td><td>AI 服務金鑰（轉字幕、文字處理）</td><td>要（免費，不綁卡）</td></tr>
@@ -274,7 +275,7 @@
       <tbody>
         <tr><td><strong>課堂看板</strong></td><td>三天的所有資料都在上面，結束後不會關</td><td><a href="https://padlet.com/mathruffian/ai-agent-t1sll0pnh4q4j27t" target="_blank" rel="noopener">Padlet</a></td></tr>
         <tr><td><strong>OpenCode 懶人包</strong></td><td>三天用到的每一項設定都有一包，回學校重裝就靠它</td><td><a href="https://github.com/mathruffian-dot/opencode-lazy-packs" target="_blank" rel="noopener">GitHub</a></td></tr>
-        <tr><td><strong>OpenCode 本體</strong></td><td>主要工具，開源免費</td><td><a href="https://github.com/anomalyco/opencode" target="_blank" rel="noopener">GitHub</a></td></tr>
+        <tr><td><strong>OpenCode 官方下載頁</strong></td><td>主要工具。<strong>要重裝或裝到另一台電腦，從這裡抓</strong>——Windows／macOS／Linux 都有</td><td><a href="https://opencode.ai/download" target="_blank" rel="noopener">opencode.ai</a></td></tr>
         <tr><td><strong>教學檔案處理工具包</strong></td><td>Day 1 下午裝的那一包：讀 PDF、生 Word／Excel／PPT、做 QR Code</td><td><a href="https://github.com/mathruffian-dot/ai-agent-ep03" target="_blank" rel="noopener">GitHub</a></td></tr>
         <tr><td><strong>外部工具連接指南</strong></td><td>Day 2 上午的「通道 × 授權」地圖，遇到沒教過的服務自己判斷</td><td><a href="https://github.com/mathruffian-dot/ai-agent-ep04" target="_blank" rel="noopener">GitHub</a></td></tr>
         <tr><td><strong>需求探索四象限 RDQ</strong></td><td>動工之前先把問題找出來，產出一張需求規格卡</td><td><a href="https://github.com/mathruffian-dot/rdq-skill-opencode" target="_blank" rel="noopener">GitHub</a></td></tr>
