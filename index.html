@@ -41,6 +41,11 @@
 
   .day{margin:38px 0 0;}
   .day img{width:100%;height:auto;border-radius:14px;display:block;margin-bottom:18px;background:var(--bg2);}
+
+  .concepts{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:18px;margin:24px 0;}
+  .concepts figure{margin:0;}
+  .concepts img{width:100%;height:auto;border-radius:12px;display:block;background:var(--bg2);}
+  .concepts figcaption{margin-top:8px;font-size:.85em;color:var(--muted);text-align:center;}
   .day .hd{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:10px;}
   .day .hd .no{color:var(--key);font-weight:800;font-size:1.05em;}
   .day .hd .ti{font-weight:800;font-size:1.25em;}
@@ -181,7 +186,25 @@
 </section>
 
 <section>
-  <h2><span class="n">04</span>三天用到的服務</h2>
+  <h2><span class="n">04</span>十張圖看懂這三天</h2>
+  <p class="lead">課堂上會講到的核心觀念，每一個都有一張圖。上課前掃過一遍，上課時就不用忙著抄。</p>
+
+  <div class="concepts">
+    <figure><img src="images/c1-genai-vs-agent.png" alt="生成式 AI 與 AI 代理人的差別"><figcaption>一個只能說，一個能做</figcaption></figure>
+    <figure><img src="images/c2-project-session-context.png" alt="專案、對話與 Context 的關係"><figcaption>專案是桌子，對話是一次坐下</figcaption></figure>
+    <figure><img src="images/c3-rdq-quadrant.png" alt="RDQ 需求探索四象限"><figcaption>動工之前，先把問題找出來</figcaption></figure>
+    <figure><img src="images/c4-four-abilities.png" alt="Agent 的四大能力"><figcaption>上網、讀檔、執行、產出</figcaption></figure>
+    <figure><img src="images/c5-channel-auth-map.png" alt="連接外部工具的通道與授權地圖"><figcaption>卡住你的通常不是程式，是授權</figcaption></figure>
+    <figure><img src="images/c6-three-layers.png" alt="技能、全域、專案三層設定"><figcaption>寫一次，之後都不用重講</figcaption></figure>
+    <figure><img src="images/c10-five-levels.png" alt="教學應用程式的五個等級"><figcaption>多爬一階，多扛一份責任</figcaption></figure>
+    <figure><img src="images/c7-github-three-stages.png" alt="GitHub 三階段：clone、push、pull"><figcaption>痛點先發生，工具才有意義</figcaption></figure>
+    <figure><img src="images/c8-key-in-backend.png" alt="API 金鑰要藏在後端而不是前端"><figcaption>學生拿不到你的金鑰</figcaption></figure>
+    <figure><img src="images/c9-three-way-sync.png" alt="雲端硬碟、GitHub、第二大腦三處同步"><figcaption>雲端硬碟救不回三天前</figcaption></figure>
+  </div>
+</section>
+
+<section>
+  <h2><span class="n">05</span>三天用到的服務</h2>
   <p class="lead">全部有免費方案，<strong>沒有任何一項需要你綁信用卡</strong>。</p>
   <div class="tw">
     <table>
@@ -210,7 +233,7 @@
 </section>
 
 <section>
-  <h2><span class="n">05</span>課後怎麼繼續</h2>
+  <h2><span class="n">06</span>課後怎麼繼續</h2>
   <p class="lead">研習結束不是終點。這些東西你隨時回來看。</p>
   <ul>
     <li><strong>AI Agent 基本功 EP01–EP07</strong>——三天的觀念主軸，每一集都對應一個半天</li>
