@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>三天 AI Agent 實作工作坊｜學員版</title>
+<meta name="description" content="三天六個半天，每個半天帶走一個作品。工具：OpenCode ＋ 免費模型。">
+<style>
+  :root{
+    --bg:#050505; --bg2:#0B0B0B; --surface:#202020; --line:#2E2E2E;
+    --text:#F5F7FA; --muted:#9AA0A6; --key:#FF6A00; --hi:#FFD400;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text);line-height:1.75;
+    font-family:"jf open 粉圓 2.1","GenSenRounded TW","Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+    -webkit-font-smoothing:antialiased;}
+  .wrap{max-width:960px;margin:0 auto;padding:0 20px;}
+
+  header{padding:72px 0 44px;text-align:center;border-bottom:1px solid var(--line);}
+  header .kicker{color:var(--key);font-size:.85em;letter-spacing:.22em;margin-bottom:14px;font-weight:700;}
+  header h1{font-size:2.5em;line-height:1.25;margin-bottom:16px;font-weight:800;}
+  header .sub{color:var(--muted);font-size:1.02em;max-width:620px;margin:0 auto;}
+  header .tags{margin-top:26px;display:flex;gap:8px;flex-wrap:wrap;justify-content:center;}
+  header .tags span{border:1px solid var(--line);border-radius:22px;padding:6px 16px;font-size:.8em;color:var(--muted);}
+
+  section{padding:52px 0;border-bottom:1px solid var(--line);}
+  section:last-of-type{border-bottom:none;}
+  h2{font-size:1.6em;margin-bottom:8px;font-weight:800;}
+  h2 .n{color:var(--key);margin-right:12px;font-variant-numeric:tabular-nums;}
+  .lead{color:var(--muted);margin-bottom:28px;}
+  h3{font-size:1.12em;margin:28px 0 10px;font-weight:700;}
+
+  .hero{background:var(--surface);border-radius:14px;padding:22px 24px;margin:22px 0;border-left:4px solid var(--hi);}
+  .hero b{color:var(--hi);}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px;margin:22px 0;}
+  .card{background:var(--surface);border-radius:12px;padding:18px 20px;border-top:3px solid var(--line);}
+  .card .t{font-weight:700;margin-bottom:6px;}
+  .card .d{font-size:.88em;color:var(--muted);}
+  .card.k{border-top-color:var(--key);}
+
+  .day{margin:38px 0 0;}
+  .day img{width:100%;height:auto;border-radius:14px;display:block;margin-bottom:18px;background:var(--bg2);}
+  .day .hd{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:10px;}
+  .day .hd .no{color:var(--key);font-weight:800;font-size:1.05em;}
+  .day .hd .ti{font-weight:800;font-size:1.25em;}
+  .day .out{background:var(--surface);border-radius:12px;padding:16px 20px;margin:14px 0;border-left:4px solid var(--key);}
+  .day .out .lbl{color:var(--key);font-size:.78em;letter-spacing:.14em;font-weight:700;margin-bottom:5px;}
+  ul{margin:12px 0 12px 22px;} li{margin-bottom:8px;}
+  .tools{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px;}
+  .tools span{background:var(--bg2);border:1px solid var(--line);border-radius:6px;padding:4px 12px;font-size:.78em;color:var(--muted);}
+
+  .tw{overflow-x:auto;margin:20px 0;-webkit-overflow-scrolling:touch;}
+  table{width:100%;border-collapse:collapse;font-size:.9em;min-width:520px;}
+  th,td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top;}
+  th{color:var(--key);font-weight:700;white-space:nowrap;}
+
+  .warn{background:rgba(255,106,0,.08);border-left:4px solid var(--key);border-radius:10px;padding:15px 20px;margin:20px 0;font-size:.92em;}
+  a{color:var(--key);text-decoration:none;border-bottom:1px solid rgba(255,106,0,.35);}
+  a:hover{border-bottom-color:var(--key);}
+  code{background:var(--bg2);border:1px solid var(--line);border-radius:5px;padding:1px 7px;font-size:.88em;color:var(--key);}
+  footer{padding:44px 0 60px;text-align:center;color:var(--muted);font-size:.82em;}
+
+  @media(max-width:600px){
+    header{padding:48px 0 32px;} header h1{font-size:1.75em;}
+    section{padding:38px 0;} h2{font-size:1.3em;} .wrap{padding:0 16px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="kicker">三師爸 SENSE BAR</div>
+    <h1>三天 AI Agent<br>實作工作坊</h1>
+    <p class="sub">三天、六個半天，<strong>每個半天帶走一個作品</strong>。<br>不是聽完就忘的研習，是六個你回學校真的能用的東西。</p>
+    <div class="tags">
+      <span>18 小時</span><span>6 個作品</span><span>OpenCode</span>
+      <span>免費模型</span><span>零程式基礎可上</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+<section>
+  <h2><span class="n">01</span>這三天在做什麼</h2>
+  <p class="lead">從「讓 AI 幫你做一件事」，走到「你有一套自己的教學工具」。</p>
+
+  <div class="hero">
+    我們會沿著一條階梯往上走：<b>地基 → 內部工具 → 外部工具 → 資料庫 → API → 教學應用</b>。<br>
+    每爬一階，你手上就多一個作品。你不需要每一階都精通——<b>剛好夠用最厲害</b>。
+  </div>
+
+  <div class="grid">
+    <div class="card k"><div class="t">① 我的第一個 Agent 專案</div><div class="d">專案骨架、規則檔，以及一張你自己的需求規格卡</div></div>
+    <div class="card k"><div class="t">② 一份可直接用的教材包</div><div class="d">上網抓素材、讀檔生教案、整理檔案，全部本機完成</div></div>
+    <div class="card k"><div class="t">③ 教材自動產線</div><div class="d">教材丟進去，簡報、音訊、逐字稿自己長出來</div></div>
+    <div class="card k"><div class="t">④ 會存資料的課堂工具</div><div class="d">學生在手機上填，資料存得住、看得到</div></div>
+    <div class="card k"><div class="t">⑤ 你自己的 AI 小應用</div><div class="d">用 API 金鑰做一個前端加後端的工具</div></div>
+    <div class="card k"><div class="t">⑥ 大專案</div><div class="d">把前面全部接起來，做一個你真的會帶回教室的東西</div></div>
+  </div>
+
+  <div class="warn">
+    <strong>開始之前，我們會先問你一件事：</strong>你現在教學上最痛的是什麼？想解決什麼問題？<br>
+    請寫詳細一點。寫不出來也沒關係——<strong>第二天和第三天，我們會帶你回頭看第一天寫的東西</strong>，那時候你會有完全不同的答案。
+  </div>
+</section>
+
+<section>
+  <h2><span class="n">02</span>來上課之前</h2>
+  <p class="lead">只有四件事，全部免費，不用先裝任何軟體。</p>
+  <ul>
+    <li><strong>帶筆電</strong>（Windows 或 Mac 都可以），確認你有<strong>管理員權限</strong>能安裝軟體</li>
+    <li>準備一個<strong>個人 Gmail</strong>。學校的公務帳號常被管理員限制，現場會卡住</li>
+    <li>如果有你自己的教材（PDF、Word、簡報），<strong>帶過來</strong>——三天都會拿它當素材</li>
+    <li>先想一想：<strong>你最想讓 AI 幫你解決哪一件事</strong></li>
+  </ul>
+  <div class="warn">
+    <strong>不需要</strong>事先安裝任何軟體，也<strong>不需要</strong>付費訂閱。三天用到的服務全部有免費方案，而且不用綁信用卡。
+  </div>
+</section>
+
+<section>
+  <h2><span class="n">03</span>三天流程</h2>
+  <p class="lead">每個半天一張圖、一個作品。</p>
+
+  <div class="day">
+    <img src="images/01-foundation.png" alt="Day 1 上午 地基">
+    <div class="hd"><span class="no">Day 1 上午</span><span class="ti">地基</span></div>
+    <p>把工具裝起來，並且搞懂三件最基本的事：專案跟對話有什麼不同、AI 的「腦容量」是什麼、為什麼要先寫規則檔。最後用一套四象限訪談法，把你的痛點變成一張看得懂的需求卡。</p>
+    <div class="out"><div class="lbl">你會帶走</div>作品① — 一個屬於你的 Agent 專案資料夾，含規則檔與需求規格卡</div>
+    <div class="tools"><span>OpenCode 桌面版</span><span>免費模型</span><span>GitHub（只下載）</span></div>
+  </div>
+
+  <div class="day">
+    <img src="images/02-internal-tools.png" alt="Day 1 下午 內部工具">
+    <div class="hd"><span class="no">Day 1 下午</span><span class="ti">內部工具</span></div>
+    <p>不接任何外部服務，純粹用 AI 內建的手腳做事：上網找素材、讀你的教材、產出教案、整理一團亂的資料夾。中間會裝一包工具，裝完你會當場<strong>聽到電腦講中文</strong>。</p>
+    <div class="out"><div class="lbl">你會帶走</div>作品② — 一份可以直接拿去用的教材包<br><span style="color:var(--muted);font-size:.9em">回家功課：把「找素材」這條流程包成你的第一個技能</span></div>
+    <div class="tools"><span>文件處理工具</span><span>影音工具</span><span>語音合成</span><span>雲端硬碟</span></div>
+  </div>
+
+  <div class="day">
+    <img src="images/03-external-tools.png" alt="Day 2 上午 外部工具">
+    <div class="hd"><span class="no">Day 2 上午</span><span class="ti">外部工具</span></div>
+    <p>讓 AI 伸手到你的電腦以外。我們會走兩條不同的通道——一條要授權登入，一條完全不用帳號——並且講清楚<strong>什麼時候卡住你的不是程式，是授權</strong>。</p>
+    <div class="out"><div class="lbl">你會帶走</div>作品③ — 一條產線：教材丟進去，簡報、音訊、逐字稿自己出來</div>
+    <div class="tools"><span>NotebookLM</span><span>YouTube 字幕</span><span>Canva（示範）</span></div>
+  </div>
+
+  <div class="day">
+    <img src="images/04-database.png" alt="Day 2 下午 資料庫">
+    <div class="hd"><span class="no">Day 2 下午</span><span class="ti">資料庫</span></div>
+    <p>先把前兩天的能力收成一個可以重複使用的技能，然後開始讓你的工具「記得住東西」。你會看到三種等級的差別，並且知道<strong>什麼時候根本不需要資料庫</strong>。</p>
+    <div class="out"><div class="lbl">你會帶走</div>作品④ — 一個學生用手機就能填、資料存得住的課堂工具</div>
+    <div class="tools"><span>Apps Script</span><span>Google 試算表</span><span>Supabase</span><span>GitHub（開始備份）</span></div>
+  </div>
+
+  <div class="day">
+    <img src="images/05-api.png" alt="Day 3 上午 API">
+    <div class="hd"><span class="no">Day 3 上午</span><span class="ti">API 金鑰</span></div>
+    <p>這一段最重要的價值是：<strong>學生不用申請帳號</strong>。金鑰放在後端，老師把工具派給學生，繞開年齡限制和帳號管理。我們會先拿它轉字幕、清逐字稿，再進到寫一個真正的前端加後端小應用。</p>
+    <div class="out"><div class="lbl">你會帶走</div>作品⑤ — 一個用 AI 服務驅動的小工具，金鑰安全放在後端</div>
+    <div class="tools"><span>Groq 免費金鑰</span><span>語音轉文字</span><span>文字清洗</span></div>
+  </div>
+
+  <div class="day">
+    <img src="images/06-teaching-app.png" alt="Day 3 下午 教學應用">
+    <div class="hd"><span class="no">Day 3 下午</span><span class="ti">教學應用</span></div>
+    <p>把前面全部接起來，做一個你真的會帶回教室的東西，然後上台講三分鐘。最後我們會談<strong>回學校之後怎麼繼續</strong>——包括資安底線，以及哪些事該留給人做。</p>
+    <div class="out"><div class="lbl">你會帶走</div>作品⑥ — 一個完整的教學應用，以及一套回校後能自己走下去的方法</div>
+    <div class="tools"><span>整合實作</span><span>成果發表</span><span>第二大腦</span></div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="n">04</span>三天用到的服務</h2>
+  <p class="lead">全部有免費方案，<strong>沒有任何一項需要你綁信用卡</strong>。</p>
+  <div class="tw">
+    <table>
+      <thead><tr><th>服務</th><th>用途</th><th>要註冊嗎</th></tr></thead>
+      <tbody>
+        <tr><td>OpenCode</td><td>主要工具，AI 代理人桌面版</td><td>要（免費）</td></tr>
+        <tr><td>免費模型</td><td>讓 OpenCode 有大腦</td><td>要（免費，不綁卡）</td></tr>
+        <tr><td>GitHub</td><td>作品備份與版本歷史</td><td>要（免費）</td></tr>
+        <tr><td>Google 帳號</td><td>試算表、Apps Script、NotebookLM</td><td>用你自己的個人 Gmail</td></tr>
+        <tr><td>Supabase</td><td>多人即時資料庫</td><td>要（免費，不綁卡）</td></tr>
+        <tr><td>Groq</td><td>AI 服務金鑰（轉字幕、文字處理）</td><td>要（免費，不綁卡）</td></tr>
+        <tr><td>雲端硬碟</td><td>作品同步，換電腦不怕</td><td>你本來就有</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="warn">
+    <strong>關於隱私，第一天我們就會講清楚：</strong>免費的 AI 模型，官方文件自己寫明<strong>對話資料可能被用來改進模型</strong>，其中有些甚至直接寫「請勿提交個人或機密資料」。<br>
+    所以三天實作有一條底線：<strong>只用座號，不用學生姓名</strong>。你自己帶來的教材，上課前請先確認裡面沒有學生名字。
+  </div>
+</section>
+
+<section>
+  <h2><span class="n">05</span>課後怎麼繼續</h2>
+  <p class="lead">研習結束不是終點。這些東西你隨時回來看。</p>
+  <ul>
+    <li><strong>AI Agent 基本功 EP01–EP07</strong>——三天的觀念主軸，每一集都對應一個半天</li>
+    <li><strong>OpenCode 基本功 EP01–EP06</strong>——工具本身的完整教學</li>
+    <li><strong>懶人包 repo</strong>——把網址丟給你的 AI，它會自己照著裝</li>
+    <li><strong>三處同步</strong>：雲端硬碟存檔案、GitHub 存歷史、第二大腦存知識</li>
+  </ul>
+  <div class="hero">
+    最後一句話送給你：<b>多爬一階，多解決問題，也多扛一份責任。</b><br>
+    所以先問自己的需求在哪——<b>千萬不要為做而做。</b>
+  </div>
+</section>
+
+</div>
+
+<footer>
+  <div class="wrap">
+    三師爸 Sense Bar｜三天 AI Agent 實作工作坊 學員版<br>
+    本頁為學員參考用，實際進度依現場狀況調整
+  </div>
+</footer>
+
+</body>
+</html>
