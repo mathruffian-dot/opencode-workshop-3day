@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Supabase 新手教師連線指南｜三天 AI Agent 實作工作坊</title>
+<meta name="description" content="從沒用過資料庫的老師，15 分鐘接好 Supabase。含 MCP 安裝、RLS 上鎖、去識別化原則。">
+<style>
+  :root{
+    --bg:#050505; --bg2:#0B0B0B; --surface:#202020; --line:#2E2E2E;
+    --text:#F5F7FA; --muted:#9AA0A6; --key:#FF6A00; --hi:#FFD400;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text);line-height:1.75;
+    font-family:"jf open 粉圓 2.1","GenSenRounded TW","Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+    -webkit-font-smoothing:antialiased;}
+  .wrap{max-width:860px;margin:0 auto;padding:0 20px;}
+
+  header{padding:60px 0 36px;border-bottom:1px solid var(--line);}
+  header .back{display:inline-block;color:var(--muted);font-size:.85em;margin-bottom:20px;border-bottom:1px solid transparent;}
+  header .back:hover{color:var(--key);}
+  header h1{font-size:2.1em;line-height:1.25;margin-bottom:14px;font-weight:800;}
+  header .meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px;}
+  header .meta span{border:1px solid var(--line);border-radius:22px;padding:5px 14px;font-size:.78em;color:var(--muted);}
+
+  section{padding:44px 0;border-bottom:1px solid var(--line);}
+  section:last-of-type{border-bottom:none;}
+  h2{font-size:1.45em;margin-bottom:8px;font-weight:800;}
+  h2 .n{color:var(--key);margin-right:12px;font-variant-numeric:tabular-nums;}
+  h3{font-size:1.05em;margin:26px 0 10px;font-weight:700;}
+  .lead{color:var(--muted);margin-bottom:22px;}
+  p{margin:12px 0;}
+  ul,ol{margin:12px 0 12px 24px;} li{margin-bottom:8px;}
+
+  .hero{background:var(--surface);border-radius:14px;padding:20px 22px;margin:20px 0;border-left:4px solid var(--hi);}
+  .hero b{color:var(--hi);}
+  .warn{background:rgba(255,106,0,.08);border-left:4px solid var(--key);border-radius:10px;padding:15px 20px;margin:18px 0;font-size:.94em;}
+  .danger{background:rgba(255,212,0,.07);border-left:4px solid var(--hi);border-radius:10px;padding:16px 20px;margin:18px 0;}
+  .danger .t{color:var(--hi);font-weight:800;margin-bottom:6px;}
+
+  .tw{overflow-x:auto;margin:18px 0;-webkit-overflow-scrolling:touch;}
+  table{width:100%;border-collapse:collapse;font-size:.9em;min-width:480px;}
+  th,td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top;}
+  th{color:var(--key);font-weight:700;white-space:nowrap;}
+
+  code{background:var(--bg2);border:1px solid var(--line);border-radius:5px;padding:1px 7px;font-size:.88em;color:var(--key);
+    font-family:"Cascadia Mono",Consolas,Menlo,monospace;word-break:break-all;}
+  pre{background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin:14px 0;
+    overflow-x:auto;font-size:.86em;line-height:1.7;-webkit-overflow-scrolling:touch;}
+  pre code{background:none;border:none;padding:0;color:var(--text);white-space:pre;word-break:normal;}
+  pre.say{border-left:4px solid var(--key);}
+  pre.say code{color:var(--hi);}
+
+  a{color:var(--key);text-decoration:none;border-bottom:1px solid rgba(255,106,0,.35);}
+  a:hover{border-bottom-color:var(--key);}
+  footer{padding:40px 0 60px;text-align:center;color:var(--muted);font-size:.8em;}
+  footer a{color:var(--muted);}
+  .src{display:block;margin-top:14px;font-size:.92em;color:var(--muted);line-height:1.6;}
+
+  @media(max-width:600px){
+    header{padding:40px 0 28px;} header h1{font-size:1.5em;}
+    section{padding:32px 0;} h2{font-size:1.2em;} .wrap{padding:0 16px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <a class="back" href="./">← 回研習大綱</a>
+    <h1>Supabase 新手教師<br>連線指南</h1>
+    <p class="lead">從沒用過資料庫的老師，把資料庫接進 OpenCode，用中文操作。</p>
+    <div class="meta">
+      <span>約 15 分鐘</span><span>免費</span><span>不綁信用卡</span><span>不用寫 SQL</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+<section>
+  <h2>這是什麼</h2>
+  <p><strong>Supabase</strong> 是一個免費的線上資料庫服務。透過 OpenCode 的 MCP 連線，你可以<strong>用中文跟 AI 說你要做什麼</strong>，AI 就會幫你操作資料庫——建立表格、新增資料、查詢成績、匯入全班名單，不用學 SQL。</p>
+  <div class="tw">
+    <table>
+      <thead><tr><th>傳統做法</th><th>現在的做法</th></tr></thead>
+      <tbody>
+        <tr><td>學 SQL 語法</td><td>講中文</td></tr>
+        <tr><td>寫後端程式連接資料庫</td><td>AI 幫你接</td></tr>
+        <tr><td>手動建表格、打資料</td><td>AI 幫你做</td></tr>
+        <tr><td>每次查資料要寫 script</td><td>直接問</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <h2>⚠️ 開始之前，先講三件會出事的事</h2>
+  <p class="lead">這三件在你動手之前就要知道，不是讀完再說。</p>
+
+  <div class="danger">
+    <div class="t">一、不要放學生真名</div>
+    三天研習的資安底線在這裡也適用：<strong>只存座號，不存姓名</strong>。<br>
+    要對照是誰，你自己在本機留一份「座號 ↔ 姓名」對照表就好，那份不要上雲。這樣萬一設定出錯外流，外流的也只是一堆號碼。<br>
+    本指南所有範例一律用座號。
+  </div>
+
+  <div class="danger">
+    <div class="t">二、AI 幫你建的表格，預設是「沒有上鎖」的</div>
+    這是 Supabase 官方文件寫明的行為：
+    <ul>
+      <li>在網頁上用 <strong>Table Editor</strong> 建表 → 權限保護（RLS）<strong>預設開啟</strong></li>
+      <li>用 <strong>SQL</strong> 建表 → 權限保護<strong>預設關閉</strong></li>
+    </ul>
+    而 <strong>AI 幫你建表一律走 SQL</strong>。所以你請 AI 建的表預設沒上鎖——任何人拿到你專案的公開金鑰就讀得到裡面的東西。<br>
+    每次請 AI 建完表，接著問一句：
+    <pre class="say"><code>剛剛建的表格有沒有開啟 RLS？沒有的話幫我開起來，並且設定成只有我自己讀得到</code></pre>
+    步驟 5 有完整的檢查方式。
+  </div>
+
+  <div class="danger">
+    <div class="t">三、免費專案閒置 7 天會被自動暫停</div>
+    官方規則。放個寒假回來，你會發現資料庫連不上——<strong>那不是壞掉，是被暫停了</strong>，去 Dashboard 點一下 Restore 就會回來，資料不會不見。<br>
+    另外免費層<strong>同時只能有 2 個 active 專案</strong>，要建第三個得先刪掉或暫停一個。
+  </div>
+</section>
+
+<section>
+  <h2><span class="n">01</span>註冊 Supabase 帳號</h2>
+  <ol>
+    <li>打開瀏覽器，連到 <a href="https://supabase.com" target="_blank" rel="noopener">supabase.com</a></li>
+    <li>點右上角的 <strong>「Start your project」</strong>（有些版面顯示為 Sign in／Sign up，都是同一個入口）</li>
+    <li>用你的 <strong>Google 帳號</strong>或 <strong>GitHub 帳號</strong>登入</li>
+    <li>第一次登入會問一些基本資料，照著填</li>
+  </ol>
+  <div class="warn">
+    ⚠️ <strong>請用個人 Gmail，不要用學校公務帳號。</strong>學校帳號常被管理員限制第三方登入，現場會卡在這一步。不綁信用卡。
+  </div>
+</section>
+
+<section>
+  <h2><span class="n">02</span>建立專案</h2>
+  <ol>
+    <li>登入後進到 <a href="https://supabase.com/dashboard" target="_blank" rel="noopener">Supabase Dashboard</a></li>
+    <li>點 <strong>「New project」</strong></li>
+    <li>照下表填，然後點 <strong>「Create new project」</strong>，等 1～2 分鐘</li>
+  </ol>
+  <div class="tw">
+    <table>
+      <thead><tr><th>欄位</th><th>填什麼</th><th>說明</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Organization</strong></td><td>用預設的</td><td>你的所屬組織</td></tr>
+        <tr><td><strong>Name</strong></td><td>例如 <code>my-class</code></td><td>專案名稱，英數字</td></tr>
+        <tr><td><strong>Database Password</strong></td><td>自己設一組，<strong>記下來</strong></td><td>這是<strong>直接連資料庫</strong>才會用到的密碼。用 AI 操作時完全不會用到它，但重設很麻煩，還是記著</td></tr>
+        <tr><td><strong>Region</strong></td><td><code>Northeast Asia (Tokyo)</code></td><td>離台灣最近</td></tr>
+        <tr><td><strong>Pricing Plan</strong></td><td><strong>Free</strong></td><td>500 MB 資料庫，班級使用非常夠</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>⭐ 順手把「專案 ID」抄下來</h3>
+  <p>專案建好後，看瀏覽器網址列：</p>
+  <pre><code>https://supabase.com/dashboard/project/abcdefghijklmnop
+                                      └──── 這一段就是專案 ID ────┘</code></pre>
+  <p><strong>把這串抄下來，下一步要用。</strong>它長得像一串隨機英文字母（官方叫 <code>project_ref</code>）。</p>
+</section>
+
+<section>
+  <h2><span class="n">03</span>安裝 Supabase MCP</h2>
+  <p>這一步是把 Supabase 接進 OpenCode。<strong>跟 AI 說一句話就好：</strong></p>
+  <pre class="say"><code>幫我安裝 Supabase MCP，我的專案 ID 是 你剛剛抄下來的那串</code></pre>
+  <p>它會幫你在 <code>~/.config/opencode/opencode.json</code> 加入這一段：</p>
+  <pre><code>{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "supabase": {
+      "type": "remote",
+      "url": "https://mcp.supabase.com/mcp?project_ref=你的專案ID",
+      "enabled": true,
+      "timeout": 300000
+    }
+  }
+}</code></pre>
+
+  <p><strong>三件事說明一下，你會知道自己在裝什麼：</strong></p>
+  <ul>
+    <li><code>?project_ref=你的專案ID</code>——官方建議的<strong>範圍限制</strong>。加了它，AI 只能碰這一個專案，碰不到你其他的專案。</li>
+    <li><code>timeout</code>——OpenCode <strong>預設只等 5 秒</strong>，資料庫操作常常不夠，所以放寬到 300 秒。少了這一行，你會常常看到連線逾時。</li>
+    <li>如果你<strong>只想查資料、不想讓 AI 動到資料</strong>，網址改成 <code>...?project_ref=你的專案ID&amp;read_only=true</code>，AI 就只能讀不能寫。新手建議先這樣用一陣子。</li>
+  </ul>
+
+  <div class="warn">
+    ⚠️ <strong>設定檔改完要重開 OpenCode</strong>，不重開不會生效。<br>
+    另外，如果你的 <code>opencode.json</code> 裡本來就有 <code>"mcp": { ... }</code> 這一段，<strong>不要整個蓋掉</strong>，只要把 <code>"supabase"</code> 那一塊加進去。請 AI 幫你合併，它不會弄壞既有設定。
+  </div>
+</section>
+
+<section>
+  <h2><span class="n">04</span>連線認證</h2>
+  <p>重開 OpenCode 之後，跟 AI 說：</p>
+  <pre class="say"><code>幫我執行 Supabase 認證</code></pre>
+  <p>它會執行 <code>opencode mcp auth supabase</code> → 瀏覽器自動打開 → 登入 Supabase → 點 <strong>「Allow」</strong> → 完成，大約 30 秒。</p>
+
+  <h3>確認真的成功了</h3>
+  <p>跟 AI 說「幫我列出 MCP 連線狀態」，它會執行 <code>opencode mcp list</code>。你要看到：</p>
+  <pre><code>● ✓ supabase  connected</code></pre>
+  <p><strong>看到 <code>✓ connected</code> 才算成功。</strong>如果是別的狀態，把畫面內容貼給 AI，請它幫你看。</p>
+</section>
+
+<section>
+  <h2><span class="n">05</span>建第一張表，並且把鎖打開</h2>
+  <p>直接用中文說：</p>
+  <pre class="say"><code>幫我在 Supabase 建立一個「班級成績」表格，欄位包括：
+- 座號（數字）
+- 國文（數字）
+- 數學（數字）
+請不要有姓名欄位。建完之後幫我開啟 RLS，並確認只有我自己讀得到。</code></pre>
+
+  <p>建完之後，<strong>自己去確認一次</strong>（這一步不要跳過）：</p>
+  <ol>
+    <li>進 Supabase Dashboard → 左邊選 <strong>Table Editor</strong></li>
+    <li>找到你剛建的表</li>
+    <li>看表格名稱旁邊有沒有 <strong>「RLS enabled」</strong>或一個鎖頭標記</li>
+  </ol>
+  <p>沒有的話，跟 AI 說「這張表的 RLS 沒開，幫我開起來」。</p>
+
+  <div class="hero">
+    <b>為什麼要自己看一眼？</b>因為這是唯一會讓學生資料外流的環節，而它預設是關的。<b>花十秒確認，比事後處理外流划算太多。</b>
+  </div>
+</section>
+
+<section>
+  <h2><span class="n">06</span>你可以這樣用</h2>
+
+  <h3>新增資料</h3>
+  <pre class="say"><code>幫我把以下成績加入 Supabase：
+1 號 國文85 數學78
+2 號 國文92 數學88
+3 號 國文78 數學95</code></pre>
+
+  <h3>查詢</h3>
+  <pre class="say"><code>幫我查國文成績大於 80 分的座號</code></pre>
+  <pre class="say"><code>幫我算出全班兩科的平均</code></pre>
+
+  <h3>匯入 CSV</h3>
+  <pre class="say"><code>幫我把桌面上的「成績.csv」匯入 Supabase</code></pre>
+  <div class="warn">
+    匯入前先確認 CSV 裡<strong>沒有姓名欄</strong>。有的話請 AI 先幫你把那一欄拿掉再匯入。
+  </div>
+</section>
+
+<section>
+  <h2><span class="n">07</span>常見問題</h2>
+
+  <h3>這要錢嗎？</h3>
+  <p><strong>不用，也不用綁信用卡。</strong>免費方案 500 MB 資料庫、1 GB 檔案空間，班級使用非常夠。</p>
+
+  <h3>連不上了，資料是不是不見了？</h3>
+  <p><strong>多半是被暫停，不是不見。</strong>免費專案閒置滿一週會自動暫停。進 Dashboard 點專案，按 <strong>Restore</strong> 就會回來，資料完整保留。</p>
+
+  <h3>我的資料安全嗎？</h3>
+  <p>Supabase 傳輸與儲存都有加密，但<strong>真正的風險不在 Supabase，在你的表格有沒有開 RLS</strong>（見步驟 5）。<br>
+  另外請務必遵守：<strong>不放姓名、不放身分證字號、不放家長聯絡方式</strong>。只放座號和成績。</p>
+
+  <h3>換電腦怎麼辦？</h3>
+  <p>另一台電腦裝好 OpenCode 後，<strong>設定檔要再貼一次</strong>（步驟 3），然後執行一次 <code>opencode mcp auth supabase</code> 重新登入。資料都在雲端不會不見。</p>
+
+  <h3>密碼忘了怎麼辦？</h3>
+  <p>Dashboard → 你的專案 → Settings → Database → 重設密碼。<br>
+  （提醒：用 AI 操作根本不會用到這組密碼，忘了也不影響日常使用。）</p>
+
+  <h3>我想更保險一點，不要讓 AI 亂改我的資料</h3>
+  <p>步驟 3 的網址加上 <code>&amp;read_only=true</code>，重開 OpenCode。AI 就只能查詢、不能新增或刪除。想改回來再把它拿掉。</p>
+</section>
+
+<section>
+  <h2>下一步</h2>
+  <ul>
+    <li>建立你的第一張資料表（<strong>記得檢查 RLS</strong>）</li>
+    <li>把班級座號和成績放進去</li>
+    <li>試著用 AI 查詢和分析</li>
+  </ul>
+  <p>卡住了就直接跟 OpenCode 說：「我卡在 XXX，幫我看看」。</p>
+  <span class="src">本指南依 2026-07 查證的官方文件撰寫：Supabase 免費方案（500 MB／2 個 active 專案／閒置 7 天暫停）、Supabase MCP（<code>https://mcp.supabase.com/mcp</code>，支援 <code>project_ref</code> 與 <code>read_only</code> 參數）、RLS 預設行為（Table Editor 開啟／SQL 關閉）、OpenCode <code>mcp auth</code> 指令與 MCP 逾時預設值 5000 ms。</span>
+</section>
+
+</div>
+
+<footer>
+  <div class="wrap">
+    <a href="./">← 回研習大綱</a><br><br>
+    三師爸 Sense Bar｜三天 AI Agent 實作工作坊<br>
+    課堂看板：<a href="https://padlet.com/mathruffian/ai-agent-t1sll0pnh4q4j27t" target="_blank" rel="noopener">padlet.com/mathruffian/ai-agent-t1sll0pnh4q4j27t</a>
+  </div>
+</footer>
+
+</body>
+</html>
