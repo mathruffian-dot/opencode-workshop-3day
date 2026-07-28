@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>加碼：用 Apps Script 管行事曆與寄信｜三天 AI Agent 實作工作坊</title>
+<meta name="description" content="做完作品④ 之後的加碼任務。讓 AI 管你的行事曆和寄信，不用申請任何 API。">
+<style>
+  :root{
+    --bg:#050505; --bg2:#0B0B0B; --surface:#202020; --line:#2E2E2E;
+    --text:#F5F7FA; --muted:#9AA0A6; --key:#FF6A00; --hi:#FFD400;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text);line-height:1.75;
+    font-family:"jf open 粉圓 2.1","GenSenRounded TW","Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+    -webkit-font-smoothing:antialiased;}
+  .wrap{max-width:860px;margin:0 auto;padding:0 20px;}
+
+  header{padding:60px 0 36px;border-bottom:1px solid var(--line);}
+  header .back{display:inline-block;color:var(--muted);font-size:.85em;margin-bottom:20px;border-bottom:1px solid transparent;}
+  header .back:hover{color:var(--key);}
+  header h1{font-size:2.1em;line-height:1.25;margin-bottom:14px;font-weight:800;}
+  header .meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px;}
+  header .meta span{border:1px solid var(--line);border-radius:22px;padding:5px 14px;font-size:.78em;color:var(--muted);}
+  header .meta span.k{border-color:var(--key);color:var(--key);}
+
+  section{padding:44px 0;border-bottom:1px solid var(--line);}
+  section:last-of-type{border-bottom:none;}
+  h2{font-size:1.45em;margin-bottom:8px;font-weight:800;}
+  h2 .n{color:var(--key);margin-right:12px;font-variant-numeric:tabular-nums;}
+  h3{font-size:1.05em;margin:26px 0 10px;font-weight:700;}
+  .lead{color:var(--muted);margin-bottom:22px;}
+  p{margin:12px 0;}
+  ul,ol{margin:12px 0 12px 24px;} li{margin-bottom:8px;}
+
+  .hero{background:var(--surface);border-radius:14px;padding:20px 22px;margin:20px 0;border-left:4px solid var(--hi);}
+  .hero b{color:var(--hi);}
+  .warn{background:rgba(255,106,0,.08);border-left:4px solid var(--key);border-radius:10px;padding:15px 20px;margin:18px 0;font-size:.94em;}
+  .danger{background:rgba(255,212,0,.07);border-left:4px solid var(--hi);border-radius:10px;padding:16px 20px;margin:18px 0;}
+  .danger .t{color:var(--hi);font-weight:800;margin-bottom:6px;}
+
+  .tw{overflow-x:auto;margin:18px 0;-webkit-overflow-scrolling:touch;}
+  table{width:100%;border-collapse:collapse;font-size:.9em;min-width:480px;}
+  th,td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top;}
+  th{color:var(--key);font-weight:700;white-space:nowrap;}
+
+  code{background:var(--bg2);border:1px solid var(--line);border-radius:5px;padding:1px 7px;font-size:.88em;color:var(--key);
+    font-family:"Cascadia Mono",Consolas,Menlo,monospace;word-break:break-all;}
+  pre{background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin:14px 0;
+    overflow-x:auto;font-size:.86em;line-height:1.7;-webkit-overflow-scrolling:touch;}
+  pre code{background:none;border:none;padding:0;color:var(--text);white-space:pre;word-break:normal;}
+  pre.say{border-left:4px solid var(--key);}
+  pre.say code{color:var(--hi);}
+
+  a{color:var(--key);text-decoration:none;border-bottom:1px solid rgba(255,106,0,.35);}
+  a:hover{border-bottom-color:var(--key);}
+  footer{padding:40px 0 60px;text-align:center;color:var(--muted);font-size:.8em;}
+  footer a{color:var(--muted);}
+  .src{display:block;margin-top:14px;font-size:.92em;color:var(--muted);line-height:1.6;}
+
+  @media(max-width:600px){
+    header{padding:40px 0 28px;} header h1{font-size:1.5em;}
+    section{padding:32px 0;} h2{font-size:1.2em;} .wrap{padding:0 16px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <a class="back" href="apps-script.html">← 回 Apps Script 連線指南</a>
+    <h1>加碼：用 Apps Script<br>管行事曆與寄信</h1>
+    <p class="lead">做完<strong>作品④</strong> 之後的加碼任務。不用申請任何 API。</p>
+    <div class="meta">
+      <span class="k">加碼任務</span><span>要先做完作品④</span><span>不用申請 API</span><span>自己照著做</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+<section>
+  <h2>為什麼這條路不用申請任何 API</h2>
+  <p>你可能聽過「要讓 AI 讀信、寄信，要去 Google Cloud 申請一堆東西」。那是真的——但那是<strong>另一條路</strong>。</p>
+  <p>差別在<strong>誰在執行</strong>：</p>
+  <div class="tw">
+    <table>
+      <thead><tr><th></th><th>外部程式接 Gmail API</th><th>Apps Script（這條）</th></tr></thead>
+      <tbody>
+        <tr><td>誰在執行</td><td>一個外部程式，來跟 Google 要你的資料</td><td><strong>你自己的腳本，在你自己的帳號裡跑</strong></td></tr>
+        <tr><td>要申請什麼</td><td>Cloud 專案、OAuth 用戶端、憑證檔、測試使用者</td><td><strong>什麼都不用</strong></td></tr>
+        <tr><td>授權方式</td><td>一長串設定</td><td>第一次執行時點一次「允許」</td></tr>
+        <tr><td>會不會過期</td><td>⚠️ 未驗證的應用<strong>7 天就失效</strong></td><td>不會</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="hero">
+    <b>這就是今天下午那張「通道 × 授權」地圖的實際應用</b>——同一件事（寄信），走不同通道，難度差一個量級。<br>
+    你已經站在對的通道上了，因為 Apps Script 本來就在你的 Google 帳號裡面。
+  </div>
+</section>
+
+<section>
+  <h2>⚠️ 動手之前：三條紅線</h2>
+
+  <div class="danger">
+    <div class="t">一、收件人一律先填你自己的信箱</div>
+    測到你滿意為止再換成別人。<strong>寄出去的信收不回來。</strong>
+  </div>
+
+  <div class="danger">
+    <div class="t">二、一般 Gmail 帳號每天只能寄 100 封</div>
+    官方配額，超過就當天不能再寄。想做「全班家長通知」會撞到這個。
+    <div class="tw">
+      <table>
+        <thead><tr><th></th><th>一般 Gmail</th><th>學校 Workspace</th></tr></thead>
+        <tbody>
+          <tr><td>每天寄信對象</td><td><strong>100</strong></td><td>1,500</td></tr>
+          <tr><td>每天建行事曆事件</td><td>5,000</td><td>10,000</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="danger">
+    <div class="t">三、觸發器要最後才設</div>
+    「每天早上 8 點自動寄信」聽起來很美，但<strong>如果腳本有錯，它會每天自動出錯一次</strong>，而且你可能好幾天後才發現。<br>
+    <strong>先手動跑到完全沒問題，再設定時觸發。</strong>
+  </div>
+</section>
+
+<section>
+  <h2><span class="n">01</span>任務一：行事曆（先做這個）</h2>
+  <p class="lead">為什麼先做行事曆？因為做錯只影響你自己的行事曆，刪掉就好。寄信錯了是對外的，收不回來。</p>
+
+  <h3>1-1 讀</h3>
+  <pre class="say"><code>幫我在現在這個 Apps Script 專案裡加一個函式，
+讀出我這週的所有行事曆事件，整理成一份清單印出來。</code></pre>
+  <p>執行之後看主控台有沒有正確列出你的行程。<strong>有列出來，代表授權和讀取都通了。</strong></p>
+
+  <h3>1-2 寫</h3>
+  <pre class="say"><code>再加一個函式，幫我在下週三下午 2 點建立一個
+叫「三年一班補考」的行事曆事件，長度 1 小時。</code></pre>
+  <p>去你的 Google 日曆看一眼，事件有沒有出現。</p>
+
+  <h3>1-3 真正有用的：從試算表批次建課表</h3>
+  <pre class="say"><code>我的試算表裡有一份課表，欄位是：日期、節次、班級、內容。
+幫我寫一個函式，讀這張表，把每一列都建成一個行事曆事件。
+執行前先印出「即將建立 N 筆」讓我確認。</code></pre>
+  <div class="hero">
+    💡 <b>「執行前先印出讓我確認」這句話很值錢。</b>批次操作在真的動手前先給你看一眼，是避免一次建錯 50 筆的最便宜保險。<b>這個習慣之後每次批次處理都用得到。</b>
+  </div>
+</section>
+
+<section>
+  <h2><span class="n">02</span>任務二：寄信（確認行事曆沒問題再做）</h2>
+
+  <h3>2-1 先寄給自己</h3>
+  <pre class="say"><code>幫我加一個函式，寄一封測試信到我自己的信箱，
+主旨「Apps Script 測試」，內容隨便寫幾個字。</code></pre>
+  <div class="warn">
+    ⚠️ <strong>第一次執行會跳一個授權畫面</strong>，看起來很嚇人但是正常的——見下面的錯誤對照表第一項。
+  </div>
+
+  <h3>2-2 個人化內容</h3>
+  <pre class="say"><code>我的試算表有一份名單，欄位是：座號、家長信箱、本週表現。
+幫我寫一個函式，針對每一列寄一封個人化的信，
+內容要帶到那一列的「本週表現」。
+
+但是——收件人先全部改成我自己的信箱，
+我要先確認格式對了再換成真正的收件人。</code></pre>
+  <p><strong>看過三封長得對的信，再把收件人換回去。</strong></p>
+
+  <h3>2-3 驗收標準</h3>
+  <ul>
+    <li>我寄給自己的信，主旨和內容都正確</li>
+    <li>個人化的部分真的有換人換內容，不是每封都一樣</li>
+    <li>我知道今天還剩幾封額度（100 − 已寄出）</li>
+    <li><strong>腳本裡沒有寫死任何家長的信箱</strong>（收件人要從試算表讀）</li>
+  </ul>
+</section>
+
+<section>
+  <h2><span class="n">03</span>🔒 資安：這一段特別要小心</h2>
+  <div class="tw">
+    <table>
+      <thead><tr><th>做法</th><th>為什麼</th></tr></thead>
+      <tbody>
+        <tr><td>試算表<strong>只放座號</strong>，姓名和信箱另外一張表</td><td>跟前面一致。信箱是個資，比姓名更敏感</td></tr>
+        <tr><td><strong>不要把家長信箱寫死在腳本裡</strong></td><td>腳本會進 GitHub。寫死等於把家長信箱推上去了</td></tr>
+        <tr><td>寄信內容<strong>不要提到其他學生</strong></td><td>一封信寄錯人，就是兩個家庭的資料同時外洩</td></tr>
+        <tr><td>群發<strong>用逐封寄</strong>，不要把所有人放在同一封的收件人欄</td><td>放同一欄等於把全班家長信箱公開給彼此看</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="hero">
+    最後一條是<b>最常見的實務錯誤，而且一犯就是全班</b>。
+  </div>
+</section>
+
+<section>
+  <h2><span class="n">04</span>常見錯誤對照表</h2>
+  <div class="tw">
+    <table>
+      <thead><tr><th>你看到的</th><th>意思</th><th>怎麼辦</th></tr></thead>
+      <tbody>
+        <tr><td><strong>「Google 尚未驗證這個應用程式」</strong></td><td>✅ <strong>正常的</strong>，因為那就是你自己寫的腳本，本來就沒送驗證</td><td>點左下角「<strong>進階</strong>」→「<strong>前往〈你的專案名〉（不安全）</strong>」→ 允許。這是你授權給你自己的腳本</td></tr>
+        <tr><td><code>Service invoked too many times</code></td><td>今天的配額用完了</td><td>等 24 小時。一般 Gmail 每天 100 封</td></tr>
+        <tr><td><code>You do not have permission to call MailApp.sendEmail</code></td><td>授權沒過，或跳過了同意畫面</td><td>重新執行一次，這次把授權流程走完</td></tr>
+        <tr><td>信寄出去了但內容是空的</td><td>通常是試算表欄位讀錯</td><td>請 AI「先把讀到的每一列印出來給我看」再往下</td></tr>
+        <tr><td>行事曆事件時間差幾小時</td><td>時區設定</td><td>跟 AI 說「幫我確認這個專案的時區設成台北」</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p><strong>卡超過十分鐘就舉手</strong>，助教會過來。</p>
+</section>
+
+<section>
+  <h2>做完之後</h2>
+  <ul>
+    <li><code>clasp push</code> 把程式碼推上去</li>
+    <li>跟著主線一起 push 到 GitHub（收工那段）</li>
+    <li>想一想：這個能不能解決你<strong>第一天寫在 Padlet 上的痛點</strong>？如果可以，第三天上午的自選題就有題目了</li>
+  </ul>
+
+  <h3>想再往上一階</h3>
+  <p>等你手動跑到完全沒問題之後，再加觸發器：</p>
+  <pre class="say"><code>幫我加一個觸發器，每週五下午 4 點自動執行一次，
+把這週的出缺席統計寄到我自己的信箱。</code></pre>
+  <div class="warn">
+    ⚠️ <strong>收件人還是先寫自己。</strong>定時觸發加上寄錯人，等於每週自動寄錯一次。
+  </div>
+
+  <span class="src">本指南依 2026-07 查證的官方文件撰寫：Apps Script 配額頁（一般帳號每日 100 收件人／5,000 行事曆事件；Workspace 1,500／10,000）。Apps Script 於使用者自己的帳號內執行，不需 Google Cloud 專案或 OAuth 用戶端——這是它與外部程式呼叫 Gmail API 的根本差異。</span>
+</section>
+
+</div>
+
+<footer>
+  <div class="wrap">
+    <a href="apps-script.html">← Apps Script 連線指南</a>　·　<a href="./">研習大綱</a><br><br>
+    三師爸 Sense Bar｜三天 AI Agent 實作工作坊<br>
+    課堂看板：<a href="https://padlet.com/mathruffian/ai-agent-t1sll0pnh4q4j27t" target="_blank" rel="noopener">padlet.com/mathruffian/ai-agent-t1sll0pnh4q4j27t</a>
+  </div>
+</footer>
+
+</body>
+</html>
