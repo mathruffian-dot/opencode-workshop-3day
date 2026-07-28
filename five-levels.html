@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>寫教學應用程式的五個等級｜三師爸 Sense Bar</title>
+<meta name="description" content="教學應用程式的五個等級：從純前端到 AI 加資料庫。對應 AntiGravity 基本功 EP05。">
+<!--
+  三師爸 Sense Bar｜對應影片：AntiGravity 基本功 EP05
+  https://youtu.be/hRdQCQSozY0
+  閱讀版（2026-06-04，L4 拆成 L4/L5 共五階）
+-->
+<style>
+  :root{
+    --board:#26342b;--board2:#1f2a23;--chalk:#f4f1e9;--chalk-dim:#cfd8cc;
+    --yellow:#ffe88a;--pink:#ff9eb0;--blue:#9ad0ff;--green:#bdf0b0;--line:rgba(244,241,233,.18);
+  }
+  *{box-sizing:border-box;}html{scroll-behavior:smooth;}
+  body{margin:0;font-family:"LXGW WenKai TC","Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+    background:#14110d;color:var(--chalk);line-height:1.85;letter-spacing:.02em;}
+  .frame{max-width:1180px;margin:0 auto;padding:14px;background:linear-gradient(180deg,#7a5a34,#5c4426);border-radius:10px;}
+  .board{background:radial-gradient(ellipse at 20% 0%,rgba(255,255,255,.05),transparent 60%),
+    radial-gradient(ellipse at 80% 100%,rgba(255,255,255,.04),transparent 55%),
+    linear-gradient(160deg,var(--board),var(--board2));border-radius:6px;padding:38px 40px 60px;box-shadow:inset 0 0 60px rgba(0,0,0,.5);}
+  .layout{display:grid;grid-template-columns:230px 1fr;gap:34px;align-items:start;}
+  nav.toc{position:sticky;top:18px;border-right:1px dashed var(--line);padding-right:18px;font-size:.9rem;}
+  nav.toc h2{font-size:.95rem;color:var(--yellow);margin:.2em 0 .8em;letter-spacing:.1em;}
+  nav.toc a{display:block;color:var(--chalk-dim);text-decoration:none;padding:4px 0;border-bottom:1px dotted transparent;}
+  nav.toc a:hover{color:var(--yellow);border-bottom-color:var(--line);}
+  header.hero{margin-bottom:34px;}
+  .eyebrow{color:var(--blue);font-size:.85rem;letter-spacing:.2em;}
+  h1{font-size:2.05rem;color:var(--chalk);margin:.25em 0 .15em;text-shadow:0 1px 0 rgba(0,0,0,.4);}
+  .sub{color:var(--chalk-dim);font-size:1rem;}
+  h2.sec{font-size:1.45rem;color:var(--pink);margin:1.8em 0 .6em;padding-bottom:.25em;border-bottom:1px solid var(--line);}
+  h3{font-size:1.15rem;color:var(--yellow);margin:1.3em 0 .4em;}
+  h4{font-size:1rem;color:var(--green);margin:1.1em 0 .3em;}
+  a{color:var(--blue);}strong{color:var(--yellow);}
+  code{background:rgba(0,0,0,.35);padding:.1em .4em;border-radius:4px;font-size:.92em;color:var(--green);}
+  pre{background:rgba(0,0,0,.4);border:1px solid var(--line);border-radius:8px;padding:14px 16px;overflow:auto;}
+  pre code{background:none;padding:0;color:var(--chalk);}
+  blockquote{border-left:4px solid var(--yellow);margin:1em 0;padding:.4em 1.1em;background:rgba(255,232,138,.07);border-radius:0 8px 8px 0;color:var(--chalk-dim);}
+  blockquote strong{color:var(--yellow);}
+  ul,ol{padding-left:1.4em;}li{margin:.2em 0;}
+  hr{border:none;border-top:1px dashed var(--line);margin:2em 0;}
+  .tw{overflow-x:auto;margin:1em 0;}
+  table{border-collapse:collapse;width:100%;font-size:.94rem;}
+  th,td{border:1px solid var(--line);padding:8px 11px;text-align:left;vertical-align:top;}
+  th{background:rgba(255,255,255,.06);color:var(--yellow);}
+  tbody tr:nth-child(even){background:rgba(255,255,255,.025);}
+  td.c,th.c{text-align:center;}
+  .lv{border-left:5px solid var(--blue);padding-left:14px;margin-top:1.6em;}
+  .lv1{border-color:#9ad0ff;}.lv2{border-color:#bdf0b0;}.lv3{border-color:#ffce6b;}
+  .lv4{border-color:#ffa9c4;}.lv5{border-color:#ff7a90;}
+  .pros li{color:var(--green);}.cons li{color:#ffc9a0;}
+  .pill{display:inline-block;font-size:.78rem;background:rgba(255,255,255,.08);border:1px solid var(--line);border-radius:999px;padding:1px 10px;margin-left:6px;color:var(--chalk-dim);}
+  footer{margin-top:40px;padding-top:18px;border-top:1px dashed var(--line);color:var(--chalk-dim);font-size:.85rem;}
+  @media(max-width:780px){.board{padding:24px 20px 40px;}.layout{grid-template-columns:1fr;gap:18px;}
+    nav.toc{position:static;border-right:none;border-bottom:1px dashed var(--line);padding:0 0 14px;}
+    nav.toc a{display:inline-block;margin-right:12px;}h1{font-size:1.6rem;}}
+</style>
+</head>
+<body>
+<div class="frame"><div class="board">
+<div class="layout">
+
+  <nav class="toc">
+    <h2>📋 目錄</h2>
+    <a href="#goal">🎯 要解決的問題</a>
+    <a href="#metaphor">🍽️ 餐廳比喻</a>
+    <a href="#map">🪜 五個等級總覽</a>
+    <a href="#demo">🎬 同一例子五階</a>
+    <a href="#lv1">1️⃣ 純前端</a>
+    <a href="#lv2">2️⃣ +Google Sheets</a>
+    <a href="#lv3">3️⃣ +Firebase</a>
+    <a href="#lv4">4️⃣ +AI（不存）</a>
+    <a href="#lv5">5️⃣ +AI+資料庫</a>
+    <a href="#table">📊 總表</a>
+    <a href="#advice">🤔 分級建議</a>
+    <a href="#refs">🌐 網路參考</a>
+  </nav>
+
+  <main>
+    <header class="hero">
+      <div class="eyebrow">三師爸 Sense Bar ｜ 影片腳本（草稿）</div>
+      <h1>寫教學應用程式的五個等級</h1>
+      <div class="sub">純前端 → +Sheets → +Firebase → +AI（不存）→ +AI+資料庫（全端）</div>
+    </header>
+
+    <section id="goal">
+      <h2 class="sec">🎯 這集要解決的問題</h2>
+      <p>老師問「我要不要學後端？要不要碰 Firebase？」其實答錯題了。真正的問題是：<strong>這個工具需不需要『記住』東西？記給誰看？要不要 AI 幫忙思考？</strong></p>
+      <blockquote><strong>先問資料要不要存、要不要 AI，再決定爬到第幾階。</strong></blockquote>
+      <p>不是越高級越好，是<strong>剛好夠用最好</strong>。多爬一階＝多一份維護成本。</p>
+    </section>
+
+    <section id="metaphor">
+      <h2 class="sec">🍽️ 先立比喻（餐廳）</h2>
+      <div class="tw"><table>
+        <thead><tr><th>角色</th><th>餐廳比喻</th><th>在程式裡</th></tr></thead>
+        <tbody>
+          <tr><td>前端</td><td>餐廳服務生</td><td>使用者看到、互動的畫面（HTML/CSS/JS）</td></tr>
+          <tr><td>後端</td><td>廚房</td><td>處理資料和指令的地方</td></tr>
+          <tr><td>資料庫</td><td>儲藏室 / 冰箱</td><td>把資料存下來</td></tr>
+          <tr><td>AI</td><td>請了一位米其林顧問</td><td>即時生成、判斷、對話</td></tr>
+        </tbody>
+      </table></div>
+      <p>五個等級＝<strong>這間餐廳長大的五個階段</strong>。AI 那部分分兩層：<strong>L4＝顧問當場問完就走</strong>、<strong>L5＝顧問講完還把病歷寫進儲藏室</strong>。</p>
+    </section>
+
+    <section id="map">
+      <h2 class="sec">🪜 五個等級總覽</h2>
+      <div class="tw"><table>
+        <thead><tr><th>等級</th><th>架構</th><th>一句話</th><th>資料存哪</th><th>適合場景</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Lv.1</strong></td><td>純前端</td><td>算完就忘</td><td>不存</td><td>計算器、抽籤、互動教材、模擬動畫</td></tr>
+          <tr><td><strong>Lv.2</strong></td><td>前端 + Google Sheets</td><td>存進你熟的試算表</td><td>Google 試算表</td><td>收表單、點名、回饋、成績登錄</td></tr>
+          <tr><td><strong>Lv.3</strong></td><td>前端 + Firebase</td><td>即時、多人、自己更新</td><td>Firestore</td><td>即時排行榜、一人一碼派題、多人協作</td></tr>
+          <tr><td><strong>Lv.4</strong></td><td>前端 + 後端 + AI</td><td>安全地用 AI（用完即走）</td><td>不存（後端只代打 AI）</td><td>AI 即時問答、即時批改、即時翻譯</td></tr>
+          <tr><td><strong>Lv.5</strong></td><td>前端 + 後端 + 資料庫 + AI</td><td>會思考又會記住</td><td>Firebase / Sheets ＋ AI</td><td>AI 批改存成績、AI 家教記錄、學習歷程</td></tr>
+        </tbody>
+      </table></div>
+      <blockquote><strong>L4 → L5 的差別：</strong>L4 只是「安全地用一下 AI」，算完不留資料；L5 把 L2/L3 的資料庫接回來，AI 結果會被存下來、能累積。<strong>L5 ＝ L4 的 AI ＋ L2/L3 的資料庫。</strong></blockquote>
+      <blockquote>
+        <strong>主線設計（同一主題爬五階）：</strong>「課堂問答」線<br>
+        Lv.1 純前端隨機抽人 → Lv.2 答案寫進試算表 → Lv.3 手機即時搶答＋排行榜 → Lv.4 AI 即時批改（看完即走）→ Lv.5 AI 批改＋存成績與歷程。
+      </blockquote>
+    </section>
+
+    <!-- 同一例子五階 -->
+    <section id="demo">
+      <h2 class="sec">🎬 同一個例子爬完五階：「隨堂測驗」</h2>
+      <blockquote>用<strong>一份小考</strong>，五種長相。每爬一階只多<strong>一個</strong>能力，觀眾一眼看出差別。這是全集的示範主軸；各等級下方的「示範建議」是其他可替換的例子。</blockquote>
+      <div class="lv lv1">
+        <h3>Lv.1 純前端 ——「自我練習版」</h3>
+        <ul><li><strong>做什麼</strong>：網頁出 10 題選擇題，學生自己作答，當場顯示對幾題 + 詳解</li>
+        <li><strong>技術</strong>：單一 HTML，題庫寫在前端，作答只在瀏覽器記憶體</li>
+        <li><strong>demo 重點</strong>：作答 → 立刻打分 → 看詳解。漂亮、即時、零成本</li>
+        <li><strong>限制</strong>：關掉就忘，老師不知道誰考了、考幾分</li>
+        <li>➕ 起點</li></ul>
+      </div>
+      <div class="lv lv2">
+        <h3>Lv.2 +Google Sheets ——「課後回收版」</h3>
+        <ul><li><strong>做什麼</strong>：同一份小考，學生填完按「送出」，座號 + 分數 + 作答寫進 Google 試算表</li>
+        <li><strong>技術</strong>：前端 → GAS → 試算表</li>
+        <li><strong>demo 重點</strong>：老師打開試算表，全班成績一覽，能排序、算平均、畫圖</li>
+        <li><strong>限制</strong>：送出後要等幾秒、不即時；很多人同秒送出會卡</li>
+        <li>➕ 比 L1 多了：<strong>把成績存下來</strong>（老師有完整紀錄）</li></ul>
+      </div>
+      <div class="lv lv3">
+        <h3>Lv.3 +Firebase ——「即時競賽版」</h3>
+        <ul><li><strong>做什麼</strong>：同一份小考變即時搶答賽。老師大螢幕一個即時排行榜，學生一送出立刻跳動</li>
+        <li><strong>技術</strong>：前端 → Firestore，<code>onSnapshot</code> 即時同步</li>
+        <li><strong>demo 重點</strong>：全班同時作答，老師螢幕即時看到誰交了、誰最快、分數排行，炒熱氣氛</li>
+        <li><strong>限制</strong>：要寫安全規則、個資去識別化</li>
+        <li>➕ 比 L2 多了：<strong>即時、多人</strong>（從「課後看」變「當場看」）</li></ul>
+      </div>
+      <div class="lv lv4">
+        <h3>Lv.4 +AI（不存）——「AI 即時講解版」</h3>
+        <ul><li><strong>做什麼</strong>：小考多了一題<strong>問答題 / 簡答題</strong>，學生寫一段文字，按「請 AI 批改」，AI 即時判對錯、指出錯在哪、給訂正建議</li>
+        <li><strong>技術</strong>：前端 → Netlify Function（藏 Groq key）→ AI → 回前端，<strong>不存</strong></li>
+        <li><strong>demo 重點</strong>：開放式答案也能即時批改，不再只能考選擇題</li>
+        <li><strong>限制</strong>：AI 結果看完即走，下次老師看不到歷史；要顧 key / 成本 / 幻覺</li>
+        <li>➕ 比 L3 多了：<strong>AI 會批改開放式答案</strong>（但不留紀錄）</li></ul>
+      </div>
+      <div class="lv lv5">
+        <h3>Lv.5 +AI+資料庫 ——「AI 學習歷程版」</h3>
+        <ul><li><strong>做什麼</strong>：同樣 AI 批改問答題，但批改完把「分數 + AI 回饋 + 原始作答」存進 Firebase。老師端儀表板：每位學生歷次小考、AI 標的弱點、進步曲線</li>
+        <li><strong>技術</strong>：前端 → 後端（藏 key + 打 AI）→ Firebase → 回前端 + 老師儀表板</li>
+        <li><strong>demo 重點</strong>：一條龍——學生作答 → AI 批改 → 存檔 → 老師看長期學習歷程與弱點分析</li>
+        <li><strong>限制</strong>：五階之最，key + 規則 + 成本 + 個資全要顧</li>
+        <li>➕ 比 L4 多了：<strong>把 AI 結果存下來</strong>＝學習歷程</li></ul>
+      </div>
+      <blockquote><strong>一句話階梯：</strong>L1 自己練 → L2 存成績 → L3 即時比 → L4 AI 批 → L5 AI 批了還記住。<strong>每一階只多一個能力。</strong></blockquote>
+    </section>
+
+    <!-- Lv.1 -->
+    <section id="lv1" class="lv lv1">
+      <h2 class="sec">1️⃣ Lv.1 純前端<span class="pill">算完就忘</span></h2>
+      <h4>示範建議</h4>
+      <ul><li>座標獵人 / 隨機抽籤器 / 互動式幾何動畫</li><li>一個單一 HTML，響應式，丟 GitHub Pages 或 Netlify 就能用</li></ul>
+      <h4>關鍵提示詞</h4>
+      <pre><code>生成一個單一 HTML 網頁程式，採用響應式設計</code></pre>
+      <h4>優點</h4>
+      <ul class="pros"><li>門檻最低：一個檔案、不用帳號、不用後端</li><li>部署最快：10 秒上線</li><li>零成本、零維護</li><li>隱私最安全：資料不離開瀏覽器</li></ul>
+      <h4>缺點</h4>
+      <ul class="cons"><li>關掉就忘，重新整理資料就沒了</li><li>無法跨裝置 / 跨人，老師看不到學生做了什麼</li><li>無法累積、無法統計</li></ul>
+      <blockquote>「這工具只是<strong>當下算一次、看一次</strong>？」→ 留在 Lv.1 就好，別過度工程。</blockquote>
+    </section>
+
+    <!-- Lv.2 -->
+    <section id="lv2" class="lv lv2">
+      <h2 class="sec">2️⃣ Lv.2 前端 + Google Sheets<span class="pill">存進你最熟的試算表</span></h2>
+      <h4>示範建議</h4>
+      <ul><li>學生成績自動登錄系統（EP03）/ 課堂回饋收集 / 線上點名表</li>
+      <li>架構：<code>前端 HTML → GAS（Google Apps Script）→ Google 試算表</code></li></ul>
+      <h4>兩種做法</h4>
+      <ol><li><strong>GAS 部署法</strong>（EP05）：Canvas 生成 index.html + code.gs，部署成網頁應用程式</li>
+      <li><strong>Netlify + GAS API 法</strong>（EP03）：Netlify 託管前端、GAS 當 API、試算表當資料庫</li></ol>
+      <h4>優點</h4>
+      <ul class="pros"><li>資料落在老師最熟的試算表：打開就懂、能排序畫圖匯出</li><li>免學 Firebase 的規則 / 權限，門檻比 Lv.3 低</li><li>免費（Google 額度內）</li><li>資料天生「人類可讀」，適合給行政 / 同事看</li></ul>
+      <h4>缺點</h4>
+      <ul class="cons"><li>不是即時：GAS 有配額與延遲，不適合「秒級多人搶答」</li><li>併發弱：很多人同時寫容易卡或撞列</li><li>GAS 部署對新手仍有貼碼、授權、改存取權幾個坑</li><li>規模一大會明顯變慢</li></ul>
+      <blockquote>「資料量不大、<strong>不要求秒級即時</strong>、我想自己打開試算表看」→ Lv.2 最舒服。</blockquote>
+    </section>
+
+    <!-- Lv.3 -->
+    <section id="lv3" class="lv lv3">
+      <h2 class="sec">3️⃣ Lv.3 前端 + Firebase<span class="pill">即時 · 多人 · 自己更新</span></h2>
+      <h4>示範建議</h4>
+      <ul><li>分班即時排行榜（EP10 demo 2）/ 一人一碼的教學駕駛艙（EP11）</li>
+      <li>架構：<code>前端 → Firestore</code>（前端直接讀寫，靠安全規則把關）</li></ul>
+      <h4>殺手鐧</h4>
+      <ul><li><code>onSnapshot</code> 即時同步：學生一答，老師畫面立刻更新（一行 query + 一行 onSnapshot）</li></ul>
+      <h4>優點</h4>
+      <ul class="pros"><li>真即時：即時排行榜、即時派題、即時看全班進度</li><li>併發強：全班同時寫沒問題</li><li>Firebase Config 可公開（apiKey 設計給前端用，不算機密）</li><li>配 Firebase MCP，能用自然語言對 Claude 直接查資料庫</li></ul>
+      <h4>缺點</h4>
+      <ul class="cons"><li>要學安全規則（Rules）：寫不好＝資料庫對全世界開放（最大的坑）</li><li>建專案、連 MCP、部署規則有學習曲線</li><li>資料在 Firestore，不像試算表一眼能讀，要另做後台或匯出</li><li>要懂配額概念（Realtime DB vs Firestore 計價不同）</li><li>個資要去識別化（用座號、token，不要存真名）</li></ul>
+      <blockquote>「需要<strong>多人同時、即時更新、即時統計</strong>」→ 才值得爬到 Lv.3。只是收個表單就上 Firebase＝殺雞用牛刀。</blockquote>
+    </section>
+
+    <!-- Lv.4 -->
+    <section id="lv4" class="lv lv4">
+      <h2 class="sec">4️⃣ Lv.4 前端 + 後端 + AI<span class="pill">安全地用 AI · 用完即走</span></h2>
+      <blockquote><strong>定位：</strong>踏進 AI 的<strong>最小可用版</strong>。後端只做一件事——藏 key、安全代打 AI。<strong>沒有資料庫</strong>，AI 算完即走。先把「安全用 AI」學會，L5 再把資料庫接回來。</blockquote>
+      <h4>示範建議</h4>
+      <ul><li>AI 即時問答 / AI 家教（單次）、即時批改（看完不存）、即時翻譯、當下出一題</li>
+      <li><strong>本集示範用 Groq 免費額度 API Key</strong>（LPU 推論超快、即時感強、免費額度大方）</li>
+      <li>架構：<code>前端 → 後端代理（藏 key）→ AI API → 回前端</code>（不落地）</li></ul>
+
+      <h3>Lv.4a 前端直連 API Key<span class="pill">沙盒 / 自己用</span></h3>
+      <ul><li>純前端 + API Key（Canvas 沙盒、EP05）：最快有感</li>
+      <li><span style="color:#ff9eb0">🔴 但 key 會外洩</span>：寫在 HTML/JS 就會下載到每個人的瀏覽器，F12 就看得到</li>
+      <li>只適合<strong>自己用 / 沙盒分享</strong>，絕不能公開上線</li></ul>
+
+      <h3>Lv.4b 後端代理 API Key<span class="pill">正式做法 · 本集主軸</span></h3>
+      <p>用 <strong>Netlify Functions</strong> 當後端藏 key（你 EP03 已在用 Netlify，門檻最低、不用碰 Firebase Functions）。</p>
+      <pre><code>❌ 純前端：key 寫在前端 → 下載到瀏覽器 → F12 看得到 → 外洩
+✅ Netlify Functions：key 存 Netlify 環境變數 → 跑在伺服器端 → 瀏覽器看不到</code></pre>
+      <h4>流程</h4>
+      <ol><li>API Key 存進 Netlify <strong>環境變數</strong>（Site settings → Environment variables）—— 不寫進程式碼、不進 git、不到前端</li>
+      <li>前端只呼叫自己的端點 <code>/.netlify/functions/ask-ai</code></li>
+      <li>function 在伺服器端讀 <code>process.env.GROQ_API_KEY</code> → 打 Groq API → 回結果</li></ol>
+      <h4>最小範例</h4>
+      <pre><code>// netlify/functions/ask-ai.js  ← 跑在伺服器端
+export default async (req) =&gt; {
+  const { prompt } = await req.json();
+  const r = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${process.env.GROQ_API_KEY}`, // key 只在這裡
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      model: "llama-3.3-70b-versatile",
+      messages: [{ role: "user", content: prompt }]
+    })
+  });
+  const data = await r.json();
+  return Response.json({ answer: data.choices[0].message.content });
+};</code></pre>
+      <p>前端只 <code>fetch('/.netlify/functions/ask-ai', {...})</code>，看不到 key。</p>
+
+      <blockquote>
+        <strong>「安全」要分兩層講清楚</strong>
+        <div class="tw"><table>
+          <thead><tr><th>風險</th><th class="c">純前端放 key</th><th class="c">Netlify Functions</th></tr></thead>
+          <tbody>
+            <tr><td>Key 被偷走（永久損失）</td><td class="c">🔴 會</td><td class="c">✅ 不會</td></tr>
+            <tr><td>端點被陌生人狂打、燒額度</td><td class="c">🔴 會</td><td class="c">⚠️ 仍可能</td></tr>
+          </tbody>
+        </table></div>
+        Netlify Functions 解決「key 外洩」，但<strong>端點是公開的</strong>。課堂建議再加：①來源檢查（只接受自己網站 origin）②簡單通行碼 / token（呼應 EP11 一人一碼）。Groq 免費額度本身就是天花板，燒完即停，風險可控。
+      </blockquote>
+
+      <h3>🤖 順帶講：AI 功能的種類<span class="pill">觀眾最容易搞混</span></h3>
+      <div class="tw"><table>
+        <thead><tr><th>類型</th><th>全名</th><th>做什麼</th><th>教育場景</th><th class="c">Groq</th></tr></thead>
+        <tbody>
+          <tr><td><strong>LLM / Chat</strong></td><td>文字生成與理解</td><td>批改、出題、對話、翻譯、摘要</td><td>AI 家教、自動出題、作文回饋</td><td class="c">✅ Llama 等</td></tr>
+          <tr><td><strong>STT</strong></td><td>語音轉文字</td><td>聲音 → 字</td><td>上課錄音轉字幕、口說評量</td><td class="c">✅ Whisper</td></tr>
+          <tr><td><strong>TTS</strong></td><td>文字轉語音</td><td>字 → 聲音</td><td>聽力教材、朗讀、無障礙</td><td class="c">✅ PlayAI TTS</td></tr>
+          <tr><td><strong>OCR / Vision</strong></td><td>影像辨識 / 多模態</td><td>圖片、手寫的字讀出來</td><td>拍課本 / 手寫作業數位化</td><td class="c">✅ vision 模型</td></tr>
+        </tbody>
+      </table></div>
+      <ul>
+        <li><strong>STT vs TTS 方向相反</strong>：STT 是「耳朵」（聲→字），TTS 是「嘴巴」（字→聲）</li>
+        <li><strong>OCR 現多被 vision LLM 取代</strong>：傳統 OCR 只認字，vision 模型能「認字＋理解」（看懂手寫算式、判對錯）</li>
+      </ul>
+
+      <h4>優點</h4>
+      <ul class="pros"><li>質變不是量變：從「存資料」升級到「理解資料、生成內容」</li><li>開放式答案也能批改、給回饋、對話</li><li>門檻比想像低：不用碰資料庫，一個 Netlify Function 就踏進 AI</li><li>最有未來感，最能打動觀眾</li></ul>
+      <h4>缺點</h4>
+      <ul class="cons"><li>🔴 API Key 安全是頭號風險：純前端放 key＝把帳號密碼貼在網頁上 → 用 Lv.4b 後端代理解決</li><li>要花錢 / 撞額度：付費 API 按量計費要設上限；Groq 免費版是「每分鐘請求數」上限，全班同時打可能撞 rate limit</li><li>會幻覺 / 不穩定：批改結果要留人工覆核</li><li>❌ 結果不留下：用完即走，無法累積、無法追蹤（要這個 → 上 Lv.5）</li></ul>
+      <blockquote>「只要<strong>當下用一下 AI</strong>、不需要把結果記錄下來」→ Lv.4 就夠了。</blockquote>
+    </section>
+
+    <!-- Lv.5 -->
+    <section id="lv5" class="lv lv5">
+      <h2 class="sec">5️⃣ Lv.5 前端 + 後端 + 資料庫 + AI<span class="pill">會思考又會記住 · 完整全端</span></h2>
+      <blockquote><strong>定位：</strong>集大成。把 <strong>L4 的 AI</strong> ＋ <strong>L2/L3 的資料庫</strong> 合體。AI 的結果會<strong>存下來</strong>、能累積、能追蹤學習歷程——真正完整的教學系統。</blockquote>
+      <h4>示範建議</h4>
+      <ul><li>數學作業 AI 批改 → 成績存進 Firebase（math-homework）</li>
+      <li>AI 家教 + 記錄對話歷程、學習歷程累積分析、一人一碼 + AI（接 EP11）</li>
+      <li>架構：<code>前端 → 後端（藏 key + 打 AI）→ 資料庫（Firebase / Sheets）→ 回前端</code></li></ul>
+      <h4>威力組合：一條龍 demo（最炸）</h4>
+      <pre><code>拍手寫作業（OCR / Vision 讀圖）
+   → 讀成文字
+   → LLM 批改、給回饋
+   → 把成績與回饋「存進資料庫」（這步是 L5 比 L4 多的）
+   → TTS 把回饋念出來</code></pre>
+      <p>「存進資料庫」就是 L4 → L5 的關鍵跳躍：從「批完就忘」變成「批完留底、能查歷程」。</p>
+      <h4>優點</h4>
+      <ul class="pros"><li>會記住：AI 的判斷、學生的歷程都留得下來</li><li>能累積、能追蹤成長，可做學習歷程、長期分析</li><li>最完整：互動 + 即時 + AI + 資料，一個系統全包</li></ul>
+      <h4>缺點</h4>
+      <ul class="cons"><li>🔴 工程量最大：前端 + 後端 + AI + 資料庫，四件事一起顧（五階之最）</li><li>🔴 個資合規最關鍵：AI ×「存學生資料」同時發生，去識別化、同意、保存期限都要想清楚（呼應 EP10 洩漏教訓）</li><li>多重成本與風險疊加：key 安全（L4）＋ 資料庫規則（L3）＋ AI 額度 ＋ 個資</li><li>出錯點最多，最需要人工覆核與監控</li></ul>
+      <blockquote>「需要 <strong>AI 思考 + 把結果留下來變學習歷程</strong>」→ 才值得爬到 Lv.5。一旦到這階，<strong>key 安全 + 資料庫規則 + 成本 + 個資</strong>四件事一起扛——爬越高、責任越大。</blockquote>
+    </section>
+
+    <!-- 總表 -->
+    <section id="table">
+      <h2 class="sec">📊 一張總表</h2>
+      <div class="tw"><table>
+        <thead><tr><th>維度</th><th class="c">Lv.1</th><th class="c">Lv.2 +Sheets</th><th class="c">Lv.3 +Firebase</th><th class="c">Lv.4 +AI</th><th class="c">Lv.5 +AI+資料庫</th></tr></thead>
+        <tbody>
+          <tr><td>門檻</td><td class="c">⭐</td><td class="c">⭐⭐</td><td class="c">⭐⭐⭐</td><td class="c">⭐⭐⭐⭐</td><td class="c">⭐⭐⭐⭐⭐</td></tr>
+          <tr><td>能存資料</td><td class="c">✗</td><td class="c">✓</td><td class="c">✓</td><td class="c">✗</td><td class="c">✓</td></tr>
+          <tr><td>即時 / 多人</td><td class="c">—</td><td class="c">弱</td><td class="c">強</td><td class="c">視後端</td><td class="c">視後端</td></tr>
+          <tr><td>有 AI</td><td class="c">✗</td><td class="c">✗</td><td class="c">✗</td><td class="c">✓</td><td class="c">✓</td></tr>
+          <tr><td>資料可讀性</td><td class="c">—</td><td class="c">高（試算表）</td><td class="c">中（要後台）</td><td class="c">—</td><td class="c">中</td></tr>
+          <tr><td>成本</td><td class="c">免費</td><td class="c">免費</td><td class="c">免費額度</td><td class="c">額度 / 付費</td><td class="c">額度 / 付費</td></tr>
+          <tr><td>維護負擔</td><td class="c">無</td><td class="c">低</td><td class="c">中</td><td class="c">高</td><td class="c">最高</td></tr>
+          <tr><td>主要風險</td><td class="c">無</td><td class="c">配額/延遲</td><td class="c">安全規則</td><td class="c">Key/成本</td><td class="c">Key/規則/成本/個資</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <!-- 建議 -->
+    <section id="advice">
+      <h2 class="sec">🤔 對這個分級的建議與可改進處</h2>
+      <h3>✅ 這個分級很好的地方</h3>
+      <ol>
+        <li><strong>對應真實能力階梯</strong>：每一階剛好多解一個問題（不存→存→即時→用 AI→記住 AI），邏輯乾淨。</li>
+        <li><strong>L4/L5 拆得好</strong>：先單獨學「安全用 AI」（L4），再學「AI ＋ 資料庫」（L5），避免新手一次扛太多。</li>
+        <li><strong>跟既有素材完美咬合</strong>：EP05 / EP03 / EP09.5+EP11 / Groq / math-homework，把散落集數串成主線。</li>
+        <li><strong>「剛好夠用」的價值觀</strong>適合老師——破解「我是不是該學更難的」焦慮。</li>
+      </ol>
+      <h3>🔧 建議補強</h3>
+      <ol>
+        <li><strong>加一個決策樹開場</strong>：要存資料嗎？→否 Lv.1 / 是→要即時多人嗎？→否 Lv.2 / 是 Lv.3。要用 AI 嗎？→要→AI 結果要存下來嗎？→否 Lv.4 / 是 Lv.5。觀眾帶走「怎麼選」。</li>
+        <li><strong>講清楚 L4 不是「退步」</strong>：L4 沒資料庫會被誤會比 L3 低。明講：<strong>L1→L3 是「資料軸」，L4→L5 是「AI 軸」，L5 是兩軸合體</strong>。</li>
+        <li><strong>Lv.2 與 Lv.3 是岔路、不是純線性升級</strong>：要「人類可讀＋我熟」選 Sheets；要「即時多人」選 Firebase。避免盲目追高級。</li>
+        <li><strong>同一主題貫穿五階</strong>（課堂問答線），觀眾看「差別」才具體（沿用 EP10 手法）。</li>
+        <li><strong>安全與責任獨立成片尾一段</strong>：L3 安全規則、L4 API Key、L5 個資，呼應 EP10 的 Supabase PAT 洩漏教訓——爬越高、責任越大。</li>
+        <li><strong>回扣「1 書桌 + 3 家園」</strong>：L1→🐙 網頁家、L2→📊 Sheets 數家、L3→🔥 Firebase 數家、L4→後端代打 AI、L5→資料庫＋AI 合體，逐一點亮家園。</li>
+      </ol>
+      <blockquote><strong>金句：</strong>不是越高級越厲害，是<strong>剛好夠用最厲害</strong>。每多爬一階，你多解一個問題，也多扛一份責任。</blockquote>
+    </section>
+
+    <!-- 參考 -->
+    <section id="refs">
+      <h2 class="sec">🌐 網路參考</h2>
+      <ul>
+        <li><a href="https://pala.tw/frontend-backend-basic/">前端與後端、基本網站架構 - pala.tw</a> — 開場立比喻佐證</li>
+        <li><a href="https://medium.com/unalai/%E5%AF%AB%E7%B5%A6%E7%B4%94%E5%89%8D%E7%AB%AF-%E8%AE%93-google-sheets-%E7%95%B6%E4%BD%A0%E7%9A%84%E5%BE%8C%E7%AB%AF%E5%AE%8C%E6%88%90%E5%AF%AB%E5%85%A5%E5%8A%9F%E8%83%BD-715799e5e013">讓 Google Sheets 當你的後端 - Medium</a> — Lv.2 技術佐證</li>
+        <li><a href="https://litotom.com/2017/07/18/why-firebase-2/">為什麼 Firebase 這麼紅 – 綠豆湯學院</a> — Lv.3「不用自己架 server」</li>
+        <li><a href="https://rexhung0302.github.io/2020/08/09/20200809/">Firebase DB 前端串接 - RexHung's Blog</a> — Lv.3 前端直連示範</li>
+        <li><a href="https://www.pintech.com.tw/tw/article/677/web-app-tools-strategy">網頁版 App 製作工具怎麼選 - pintech</a> — 「剛好夠用」選型觀念</li>
+        <li><a href="https://acropolium.com/blog/6-ai-use-cases-in-education-transforming-the-learning-experience/">6 AI Use Cases in Education 2025 - Acropolium</a> — Lv.4/5 教育 AI 案例</li>
+        <li><a href="https://arxiv.org/pdf/2512.12045">AI as a Teaching Partner（arXiv）</a> — Lv.4/5 學理佐證</li>
+        <li><a href="https://schoolai.com/blog/integrate-ai-tools-school-existing-tech-ecosystem/">Integrate AI tools into school tech - SchoolAI</a> — Lv.5 個資 / 合規提醒</li>
+      </ul>
+      <blockquote>教育場景共識（2025）：AI 導入重點不在「炫」，而在<strong>資料保護、去識別化、合規與同意</strong>——正好呼應 Lv.5 片尾要講的責任。</blockquote>
+    </section>
+
+    <footer>
+      📝 來源筆記：Obsidian <code>創作庫/暫時腳本/寫教學應用程式的五個等級.md</code>（真理之源）<br>
+      ⚙️ 本頁為自動生成的閱讀版，請勿手改；改筆記後重新生成即可覆蓋。｜最後生成：2026-06-04（五階版）
+    </footer>
+  </main>
+</div>
+</div></div>
+</body>
+</html>
