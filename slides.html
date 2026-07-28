@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>簡報技能使用指南｜三天 AI Agent 實作工作坊</title>
+<meta name="description" content="兩包免費簡報技能：HTML 互動簡報雙擊就播、可編輯 PPT 回去還能改。零金鑰、不用綁卡。">
+<style>
+  :root{
+    --bg:#050505; --bg2:#0B0B0B; --surface:#202020; --line:#2E2E2E;
+    --text:#F5F7FA; --muted:#9AA0A6; --key:#FF6A00; --hi:#FFD400;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text);line-height:1.75;
+    font-family:"jf open 粉圓 2.1","GenSenRounded TW","Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+    -webkit-font-smoothing:antialiased;}
+  .wrap{max-width:860px;margin:0 auto;padding:0 20px;}
+
+  header{padding:60px 0 36px;border-bottom:1px solid var(--line);}
+  header .back{display:inline-block;color:var(--muted);font-size:.85em;margin-bottom:20px;border-bottom:1px solid transparent;}
+  header .back:hover{color:var(--key);}
+  header h1{font-size:2.1em;line-height:1.25;margin-bottom:14px;font-weight:800;}
+  header .meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px;}
+  header .meta span{border:1px solid var(--line);border-radius:22px;padding:5px 14px;font-size:.78em;color:var(--muted);}
+  header .meta span.k{border-color:var(--key);color:var(--key);}
+
+  section{padding:44px 0;border-bottom:1px solid var(--line);}
+  section:last-of-type{border-bottom:none;}
+  h2{font-size:1.45em;margin-bottom:8px;font-weight:800;}
+  h2 .n{color:var(--key);margin-right:12px;font-variant-numeric:tabular-nums;}
+  h3{font-size:1.05em;margin:26px 0 10px;font-weight:700;}
+  .lead{color:var(--muted);margin-bottom:22px;}
+  p{margin:12px 0;}
+  ul,ol{margin:12px 0 12px 24px;} li{margin-bottom:8px;}
+
+  .hero{background:var(--surface);border-radius:14px;padding:20px 22px;margin:20px 0;border-left:4px solid var(--hi);}
+  .hero b{color:var(--hi);}
+  .warn{background:rgba(255,106,0,.08);border-left:4px solid var(--key);border-radius:10px;padding:15px 20px;margin:18px 0;font-size:.94em;}
+  .danger{background:rgba(255,212,0,.07);border-left:4px solid var(--hi);border-radius:10px;padding:16px 20px;margin:18px 0;}
+  .danger .t{color:var(--hi);font-weight:800;margin-bottom:6px;}
+
+  .tw{overflow-x:auto;margin:18px 0;-webkit-overflow-scrolling:touch;}
+  table{width:100%;border-collapse:collapse;font-size:.9em;min-width:480px;}
+  th,td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top;}
+  th{color:var(--key);font-weight:700;white-space:nowrap;}
+
+  code{background:var(--bg2);border:1px solid var(--line);border-radius:5px;padding:1px 7px;font-size:.88em;color:var(--key);
+    font-family:"Cascadia Mono",Consolas,Menlo,monospace;word-break:break-all;}
+  pre{background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin:14px 0;
+    overflow-x:auto;font-size:.86em;line-height:1.7;-webkit-overflow-scrolling:touch;}
+  pre code{background:none;border:none;padding:0;color:var(--text);white-space:pre;word-break:normal;}
+  pre.say{border-left:4px solid var(--key);}
+  pre.say code{color:var(--hi);}
+
+  a{color:var(--key);text-decoration:none;border-bottom:1px solid rgba(255,106,0,.35);}
+  a:hover{border-bottom-color:var(--key);}
+  footer{padding:40px 0 60px;text-align:center;color:var(--muted);font-size:.8em;}
+  footer a{color:var(--muted);}
+  .src{display:block;margin-top:14px;font-size:.92em;color:var(--muted);line-height:1.6;}
+
+  @media(max-width:600px){
+    header{padding:40px 0 28px;} header h1{font-size:1.5em;}
+    section{padding:32px 0;} h2{font-size:1.2em;} .wrap{padding:0 16px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <a class="back" href="./">← 回研習大綱</a>
+    <h1>簡報技能<br>使用指南</h1>
+    <p class="lead">裝一次，回學校每學期都能用。<strong>完全免費，不用綁信用卡。</strong></p>
+    <div class="meta">
+      <span class="k">第三天</span><span>帶得走的技能</span><span>安裝約 10 分鐘</span><span>零 API 金鑰</span>
+    </div>
+  </div>
+</header>
+
+<section>
+  <h2>怎麼開始：把這個網址丟給你的 AI</h2>
+  <p class="lead">這份指南有一份<strong>寫給 AI 看的指令檔</strong>。你不用自己讀完下面全部——把網址貼給 OpenCode，它會照著做，該問你的時候會停下來問。</p>
+  <pre class="say"><code>照這份做：
+https://raw.githubusercontent.com/mathruffian-dot/opencode-workshop-3day/main/skills/slide-setup/SKILL.md</code></pre>
+  <div class="hero">
+    那份指令檔裡已經幫你擋掉<b>研習現場實測出來的兩個坑</b>——安裝程式會裝錯資料夾卻顯示成功、用錯終端機會直接崩潰。<br>
+    <b>所以照著它做就好</b>，這兩件事它會自己先處理掉。
+  </div>
+  <p>下面的內容是給<strong>你自己</strong>看的——了解它在做什麼、以及怎麼檢查它做對了。</p>
+</section>
+
+<section>
+  <h2><span class="n">01</span>先選一包（也可以兩包都裝）</h2>
+  <p class="lead">兩包都是「說一句話，AI 讀你的教材做出簡報」，差別在產出的檔案格式。</p>
+  <div class="tw">
+  <table>
+    <tr><th></th><th>HTML 互動簡報</th><th>可編輯 PPT</th></tr>
+    <tr><td>產出檔案</td><td>一個 <code>index.html</code></td><td>一個 <code>.pptx</code></td></tr>
+    <tr><td>怎麼播</td><td><strong>雙擊，瀏覽器全螢幕</strong></td><td>PowerPoint 打開</td></tr>
+    <tr><td>事後改字</td><td>要請 AI 改</td><td><strong>PowerPoint 直接改</strong></td></tr>
+    <tr><td>互動效果</td><td>✅ 滑桿、前後對比</td><td>❌</td></tr>
+    <tr><td>傳給同事 / 學校收檔</td><td>⚠️ 不是標準格式</td><td>✅ 就是一般 PPT</td></tr>
+    <tr><td>還要裝什麼</td><td>Python（已有）</td><td>Python ＋ <strong>Node.js</strong>（已有）</td></tr>
+  </table>
+  </div>
+  <div class="hero">
+    <b>怎麼選：</b>「上課直接播，最好有點互動」→ <b>HTML</b>。<br>
+    「做完還要改」「要給同事」「學校要收檔」→ <b>PPT</b>。<br>
+    兩包不衝突，<b>都裝也可以</b>。
+  </div>
+</section>
+
+<section>
+  <h2><span class="n">02</span>為什麼不用 AI 生的圖？</h2>
+  <p>這兩包是<strong>刻意挑的零金鑰版本</strong>——底圖用漸層色、圖示用 emoji 和內建圖形。</p>
+  <p>網路上很多教學會叫你去申請 OpenAI 金鑰，<strong>那是完整版</strong>。完整版要綁信用卡、要付費，這場研習不走那條路。</p>
+  <div class="warn">
+    <strong>真的需要圖怎麼辦？</strong><br>
+    自己去 Google Gemini 或 ChatGPT 的網頁版生一張，存下來，再請 AI 幫你插進簡報。免費、不用管金鑰。
+  </div>
+</section>
+
+<section>
+  <h2><span class="n">03</span>先建一個資料夾（這步不能跳）</h2>
+  <p>跟 OpenCode 說：</p>
+  <pre class="say"><code>幫我建立 OpenCode 的技能資料夾</code></pre>
+  <p>或你自己在 PowerShell 貼這一行：</p>
+  <pre><code>New-Item -ItemType Directory -Force "$HOME\.config\opencode\skills"</code></pre>
+  <div class="danger">
+    <div class="t">🔴 為什麼一定要先做這步</div>
+    安裝程式會自己找「技能要裝到哪」，但它的找法是<strong>「看哪個資料夾已經存在」</strong>。<br><br>
+    如果 OpenCode 的技能資料夾還沒被建出來，它會<strong>裝到 Claude Code 的資料夾去</strong>，然後<strong>畫面照樣顯示「✔ 已安裝！」</strong>——你會以為成功了，但 OpenCode 永遠找不到這個技能。<br><br>
+    這是<strong>實測出來的，不是理論</strong>。先建資料夾就沒事。
+  </div>
+</section>
+
+<section>
+  <h2><span class="n">04</span>安裝</h2>
+  <p>跟 OpenCode 說（<strong>選你要的那一包</strong>）：</p>
+  <pre class="say"><code>幫我安裝 html-slide-builder-lite 這個簡報技能，
+repo 是 https://github.com/mathruffian-dot/claude-html-slide-builder-lite
+裝之前先確認 ~/.config/opencode/skills 資料夾存在，
+用 PowerShell 跑 install.py，不要用 bash</code></pre>
+  <p>要 PPT 那包就把網址換成 <code>https://github.com/mathruffian-dot/soil-teaching-deck</code>。</p>
+  <div class="warn">
+    ⚠️ <strong>不要 clone 到 Google 雲端硬碟裡</strong>，同步會咬住檔案。放 <code>C:\Users\你的名字\</code> 底下就好。
+  </div>
+</section>
+
+<section>
+  <h2><span class="n">05</span>驗證（不要跳過）</h2>
+  <p><strong>畫面說成功不算數，要看檔案真的在不在。</strong> 跟 OpenCode 說：</p>
+  <pre class="say"><code>列出 ~/.config/opencode/skills 底下有哪些資料夾</code></pre>
+  <ul>
+    <li>看到 <code>html-slide-builder-lite</code> 或 <code>soil-teaching-deck</code> → ✅ 成功</li>
+    <li>沒看到 → 跟 AI 說下面這句</li>
+  </ul>
+  <pre class="say"><code>技能沒裝到 OpenCode 的資料夾，
+去 ~/.claude/skills 找一下，找到就搬過來</code></pre>
+</section>
+
+<section>
+  <h2><span class="n">06</span>關掉 OpenCode，重新打開</h2>
+  <div class="hero">
+    <b>技能是開啟程式時載入的，不重開不會生效。</b><br>
+    很多人卡在這裡——裝好了、位置也對，就是叫不動，原因只是沒重開。
+  </div>
+</section>
+
+<section>
+  <h2><span class="n">07</span>做第一份簡報</h2>
+  <p>準備好你的教材（Word、PDF、純文字，甚至一段課本內容都行），然後說：</p>
+  <pre class="say"><code>把這份教材做成互動簡報，大概 12 頁</code></pre>
+  <p>或：</p>
+  <pre class="say"><code>把這份教材做成可編輯的 PPT，用教學版型</code></pre>
+  <p>做完之後：</p>
+  <ul>
+    <li><strong>HTML</strong> → 檔案總管裡<strong>雙擊 <code>index.html</code></strong>，瀏覽器全螢幕就是投影片</li>
+    <li><strong>PPT</strong> → 用 PowerPoint 打開，<strong>逐頁看一下有沒有字爆出來</strong></li>
+  </ul>
+</section>
+
+<section>
+  <h2><span class="n">08</span>常見問題</h2>
+  <div class="tw">
+  <table>
+    <tr><th>問題</th><th>怎麼處理</th></tr>
+    <tr><td>裝好了但 AI 說找不到技能</td><td>九成是沒重開 OpenCode。還是不行，回步驟 05 確認檔案位置</td></tr>
+    <tr><td>一堆紅字，出現 <code>cp950</code></td><td>AI 用錯終端機了。跟它說「<strong>改用 PowerShell 跑</strong>」</td></tr>
+    <tr><td>做 PPT 時說找不到 node</td><td>第二天教 clasp 時裝過 Node.js。跟 AI 說「幫我確認 Node.js 有沒有裝好」</td></tr>
+    <tr><td>可以改配色嗎</td><td>可以，直接說「改成藍色系」「字再大一點」</td></tr>
+    <tr><td>我想要 AI 生的插圖</td><td>去 Gemini／ChatGPT 網頁版生好存成圖檔，再說「把這張圖放到第 3 頁」</td></tr>
+  </table>
+  </div>
+</section>
+
+<section>
+  <h2>回學校之後</h2>
+  <p>這兩包裝在<strong>你的電腦上</strong>，跟這場研習的專案無關——開任何資料夾都能用。</p>
+  <p>下學期要做課程簡報、期初報告、家長日簡報，打開 OpenCode 說一句話就好。</p>
+  <span class="src">
+    技能來源：<a href="https://github.com/mathruffian-dot/claude-html-slide-builder-lite" target="_blank" rel="noopener">claude-html-slide-builder-lite</a>　·　<a href="https://github.com/mathruffian-dot/soil-teaching-deck" target="_blank" rel="noopener">soil-teaching-deck</a><br>
+    兩包皆為 MIT 授權、零 API 金鑰。安裝落點問題為 2026-07-29 於繁體中文 Windows 實測確認。
+  </span>
+</section>
+
+<footer>
+  <div class="wrap">
+    <a href="./">← 研習大綱</a>　·　<a href="video.html">影片技能使用指南 →</a><br><br>
+    三師爸 Sense Bar｜三天 AI Agent 實作工作坊<br>
+    課堂看板：<a href="https://padlet.com/mathruffian/ai-agent-t1sll0pnh4q4j27t" target="_blank" rel="noopener">padlet.com/mathruffian/ai-agent-t1sll0pnh4q4j27t</a>
+  </div>
+</footer>
+
+</body>
+</html>

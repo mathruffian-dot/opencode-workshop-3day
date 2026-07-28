@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>影片技能使用指南｜三天 AI Agent 實作工作坊</title>
+<meta name="description" content="三類影片製作規範：活動紀錄、教學影片、社群科普。免費圖庫＋微軟免費語音，零 API 金鑰。">
+<style>
+  :root{
+    --bg:#050505; --bg2:#0B0B0B; --surface:#202020; --line:#2E2E2E;
+    --text:#F5F7FA; --muted:#9AA0A6; --key:#FF6A00; --hi:#FFD400;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text);line-height:1.75;
+    font-family:"jf open 粉圓 2.1","GenSenRounded TW","Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+    -webkit-font-smoothing:antialiased;}
+  .wrap{max-width:860px;margin:0 auto;padding:0 20px;}
+
+  header{padding:60px 0 36px;border-bottom:1px solid var(--line);}
+  header .back{display:inline-block;color:var(--muted);font-size:.85em;margin-bottom:20px;border-bottom:1px solid transparent;}
+  header .back:hover{color:var(--key);}
+  header h1{font-size:2.1em;line-height:1.25;margin-bottom:14px;font-weight:800;}
+  header .meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px;}
+  header .meta span{border:1px solid var(--line);border-radius:22px;padding:5px 14px;font-size:.78em;color:var(--muted);}
+  header .meta span.k{border-color:var(--key);color:var(--key);}
+
+  section{padding:44px 0;border-bottom:1px solid var(--line);}
+  section:last-of-type{border-bottom:none;}
+  h2{font-size:1.45em;margin-bottom:8px;font-weight:800;}
+  h2 .n{color:var(--key);margin-right:12px;font-variant-numeric:tabular-nums;}
+  h3{font-size:1.05em;margin:26px 0 10px;font-weight:700;}
+  .lead{color:var(--muted);margin-bottom:22px;}
+  p{margin:12px 0;}
+  ul,ol{margin:12px 0 12px 24px;} li{margin-bottom:8px;}
+
+  .hero{background:var(--surface);border-radius:14px;padding:20px 22px;margin:20px 0;border-left:4px solid var(--hi);}
+  .hero b{color:var(--hi);}
+  .warn{background:rgba(255,106,0,.08);border-left:4px solid var(--key);border-radius:10px;padding:15px 20px;margin:18px 0;font-size:.94em;}
+  .danger{background:rgba(255,212,0,.07);border-left:4px solid var(--hi);border-radius:10px;padding:16px 20px;margin:18px 0;}
+  .danger .t{color:var(--hi);font-weight:800;margin-bottom:6px;}
+
+  .tw{overflow-x:auto;margin:18px 0;-webkit-overflow-scrolling:touch;}
+  table{width:100%;border-collapse:collapse;font-size:.9em;min-width:480px;}
+  th,td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top;}
+  th{color:var(--key);font-weight:700;white-space:nowrap;}
+
+  code{background:var(--bg2);border:1px solid var(--line);border-radius:5px;padding:1px 7px;font-size:.88em;color:var(--key);
+    font-family:"Cascadia Mono",Consolas,Menlo,monospace;word-break:break-all;}
+  pre{background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin:14px 0;
+    overflow-x:auto;font-size:.86em;line-height:1.7;-webkit-overflow-scrolling:touch;}
+  pre code{background:none;border:none;padding:0;color:var(--text);white-space:pre;word-break:normal;}
+  pre.say{border-left:4px solid var(--key);}
+  pre.say code{color:var(--hi);}
+
+  a{color:var(--key);text-decoration:none;border-bottom:1px solid rgba(255,106,0,.35);}
+  a:hover{border-bottom-color:var(--key);}
+  footer{padding:40px 0 60px;text-align:center;color:var(--muted);font-size:.8em;}
+  footer a{color:var(--muted);}
+  .src{display:block;margin-top:14px;font-size:.92em;color:var(--muted);line-height:1.6;}
+
+  @media(max-width:600px){
+    header{padding:40px 0 28px;} header h1{font-size:1.5em;}
+    section{padding:32px 0;} h2{font-size:1.2em;} .wrap{padding:0 16px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <a class="back" href="./">← 回研習大綱</a>
+    <h1>影片技能<br>使用指南</h1>
+    <p class="lead">AI 帶著你做完一支影片：寫腳本 → 你確認 → 定風格 → 你確認 → 做畫面 → 配旁白 → 輸出 MP4。</p>
+    <div class="meta">
+      <span class="k">第三天</span><span>帶得走的技能</span><span>要多裝兩個東西</span><span>零 API 金鑰</span>
+    </div>
+  </div>
+</header>
+
+<section>
+  <h2>怎麼開始：把這個網址丟給你的 AI</h2>
+  <p class="lead">這份指南有一份<strong>寫給 AI 看的指令檔</strong>。把網址貼給 OpenCode，它會照著做，該問你的時候會停下來問。</p>
+  <pre class="say"><code>照這份做：
+https://raw.githubusercontent.com/mathruffian-dot/opencode-workshop-3day/main/skills/video-specs/SKILL.md</code></pre>
+  <div class="hero">
+    那份指令檔已經幫你擋掉<b>實測出來的坑</b>——不會把檔案放進雲端硬碟害渲染失敗、不會用壞掉的方式打包技能、也不會沒給你看腳本就悶頭開做。
+  </div>
+  <p>下面的內容是給<strong>你自己</strong>看的。</p>
+</section>
+
+<section>
+  <h2><span class="n">01</span>可以做哪三類影片</h2>
+  <div class="tw">
+  <table>
+    <tr><th>類型</th><th>片長</th><th>老師可以拿來做什麼</th></tr>
+    <tr><td><strong>01 活動紀錄</strong></td><td>60–180 秒</td><td>校慶、運動會、畢業典禮、比賽紀錄</td></tr>
+    <tr><td><strong>02 教學影片</strong></td><td>4–8 分鐘</td><td>學科概念講解、翻轉教室的課前影片</td></tr>
+    <tr><td><strong>03 社群科普</strong></td><td>2–3 分鐘</td><td>班級宣導、給家長看的說明短片</td></tr>
+  </table>
+  </div>
+  <div class="warn">
+    <strong>現場建議做 01 或 03</strong>（短，做得完）。02 教學影片留回學校做。
+  </div>
+</section>
+
+<section>
+  <h2><span class="n">02</span>這一包跟簡報技能不一樣</h2>
+  <p>簡報技能是「裝進 OpenCode，之後在哪都能用」。</p>
+  <p><strong>影片這一包不裝進 OpenCode</strong>——你把它下載成一個資料夾，<strong>要做影片時就在那個資料夾裡開 OpenCode</strong>。</p>
+
+  <h3>為什麼不裝成技能？</h3>
+  <p>它有提供「打包成技能」的功能，但那個功能有兩個問題（實測）：</p>
+  <ol>
+    <li><strong>打包出來的技能記的是「絕對路徑」。</strong>你哪天整理電腦、把資料夾搬個位置或改個名字，技能就壞了——而且壞得很安靜，AI 只會說「找不到規範」，你不會知道原因。</li>
+    <li><strong>它的說明書寫錯了。</strong>文件叫你打 <code>--target opencode</code>，但程式只認 <code>--target=opencode</code>（<strong>中間要等號</strong>）。照說明書打會<strong>默默裝到別的地方</strong>，畫面還顯示成功。</li>
+  </ol>
+  <div class="danger">
+    <div class="t">🔴 所以：下載成資料夾用就好</div>
+    AI 問你「要不要打包成技能」時，回答<strong>不要</strong>。
+  </div>
+</section>
+
+<section>
+  <h2><span class="n">03</span>要多裝兩個東西</h2>
+  <p>前兩天已經裝過 Python、Node.js、git。這一包<strong>還要兩個新的</strong>：</p>
+  <div class="tw">
+  <table>
+    <tr><th>要裝什麼</th><th>做什麼用</th><th>大概多久</th></tr>
+    <tr><td><strong>ffmpeg</strong></td><td>把畫面跟聲音合成影片</td><td>3–5 分鐘</td></tr>
+    <tr><td><strong>Playwright</strong></td><td>自動錄製畫面</td><td>5–10 分鐘</td></tr>
+  </table>
+  </div>
+  <div class="hero">
+    <b>先有心理準備</b>，不要裝到一半才發現。如果現場卡住超過 15 分鐘，跟 AI 說：<br><br>
+    <code>渲染環境先跳過，我們只做腳本跟畫面，回學校再補</code><br><br>
+    你還是會拿到一份完整腳本和一個能在瀏覽器播的畫面——<b>那已經是作品了</b>，只是還沒變成 MP4。
+  </div>
+</section>
+
+<section>
+  <h2><span class="n">04</span>下載</h2>
+  <p>跟 OpenCode 說：</p>
+  <pre class="say"><code>幫我把 https://github.com/mathruffian-dot/claude-video-specs-lite
+下載到 C:\Users\我的名字\video</code></pre>
+  <div class="danger">
+    <div class="t">🔴 絕對不要下載到 Google 雲端硬碟裡</div>
+    錄影工具會產生大量小檔案，雲端硬碟的同步會咬住它們，<strong>渲染一定失敗</strong>。
+  </div>
+</section>
+
+<section>
+  <h2><span class="n">05</span>在那個資料夾裡開 OpenCode</h2>
+  <p>把 OpenCode 的工作資料夾切到 <code>C:\Users\我的名字\video</code>。</p>
+  <p>那個資料夾裡有一個 <code>opencode.json</code>，OpenCode 一開就會<strong>自動讀到製作規範</strong>。</p>
+</section>
+
+<section>
+  <h2><span class="n">06</span>說一句話啟動</h2>
+  <pre class="say"><code>我要做影片</code></pre>
+  <p>接下來 AI 會帶你跑五個階段：</p>
+  <div class="tw">
+  <table>
+    <tr><th>階段</th><th>它會做什麼</th><th>你要做什麼</th></tr>
+    <tr><td>1</td><td>檢查你電腦缺什麼</td><td>決定要不要裝</td></tr>
+    <tr><td>2</td><td>介紹三類影片</td><td><strong>選一類</strong></td></tr>
+    <tr><td>3</td><td>寫腳本 → 定風格 → 做畫面</td><td><strong>兩個確認點都要看過</strong></td></tr>
+    <tr><td>4</td><td>依你的意見調整</td><td>提意見</td></tr>
+    <tr><td>5</td><td>問要不要打包成技能</td><td><strong>回答不要</strong></td></tr>
+  </table>
+  </div>
+</section>
+
+<section>
+  <h2><span class="n">07</span>最重要的一件事：腳本一定要先看過</h2>
+  <p>AI 很容易「收到指令就悶頭開做」，做到一半你才發現方向不對，整支重來。</p>
+  <p>這套規範刻意設計了<strong>兩個煞車點</strong>：</p>
+  <ol>
+    <li><strong><code>SCRIPT.md</code></strong>（旁白 ＋ 字卡 ＋ 分鏡）——你確認了才往下</li>
+    <li><strong><code>DESIGN.md</code></strong>（字體／配色／節奏）——你確認了才開始做</li>
+  </ol>
+  <div class="hero">
+    <b>請務必真的看過再說「可以」。</b>這兩份文件各只要一兩分鐘讀完，但能省掉半小時的重做。
+  </div>
+  <p>如果 AI 沒給你看就開始寫程式，直接跟它說：</p>
+  <pre class="say"><code>停，先給我看 SCRIPT.md</code></pre>
+</section>
+
+<section>
+  <h2><span class="n">08</span>常見問題</h2>
+  <div class="tw">
+  <table>
+    <tr><th>問題</th><th>怎麼處理</th></tr>
+    <tr><td>做到一半語音突然斷掉</td><td>跟 AI 說「<strong>旁白改成一句一句慢慢生成，不要同時發</strong>」</td></tr>
+    <tr><td>說找不到 ffmpeg</td><td>裝完 ffmpeg 要<strong>關掉終端機重開</strong>才會生效</td></tr>
+    <tr><td>影片開頭有一塊怪怪的遮罩</td><td>跟 AI 說「用 <code>?render=true</code> 模式重錄」</td></tr>
+    <tr><td>字體變成很醜的預設字</td><td>跟 AI 說「幫我裝源石黑體」。免費開源，會自動下載</td></tr>
+    <tr><td>可以用我自己拍的照片嗎</td><td>可以，而且<strong>建議這樣做</strong>。把照片放進資料夾，告訴 AI 在哪</td></tr>
+  </table>
+  </div>
+</section>
+
+<section>
+  <h2>回學校之後</h2>
+  <p>要做影片時，<strong>打開 <code>C:\Users\我的名字\video</code> 這個資料夾的 OpenCode</strong>，說「我要做影片」就會啟動。</p>
+  <div class="warn">
+    記得：<strong>這個資料夾不要搬家、不要改名字。</strong>
+  </div>
+  <span class="src">
+    技能來源：<a href="https://github.com/mathruffian-dot/claude-video-specs-lite" target="_blank" rel="noopener">claude-video-specs-lite</a>（MIT 授權，零 API 金鑰）<br>
+    打包參數與安裝落點問題為 2026-07-29 實測確認。
+  </span>
+</section>
+
+<footer>
+  <div class="wrap">
+    <a href="./">← 研習大綱</a>　·　<a href="slides.html">← 簡報技能使用指南</a><br><br>
+    三師爸 Sense Bar｜三天 AI Agent 實作工作坊<br>
+    課堂看板：<a href="https://padlet.com/mathruffian/ai-agent-t1sll0pnh4q4j27t" target="_blank" rel="noopener">padlet.com/mathruffian/ai-agent-t1sll0pnh4q4j27t</a>
+  </div>
+</footer>
+
+</body>
+</html>
