@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Apps Script ＋ clasp 連線指南｜三天 AI Agent 實作工作坊</title>
+<meta name="description" content="第二天下午做作品④ 用的。讓 AI 直接改你的試算表腳本，約 15 分鐘。">
+<style>
+  :root{
+    --bg:#050505; --bg2:#0B0B0B; --surface:#202020; --line:#2E2E2E;
+    --text:#F5F7FA; --muted:#9AA0A6; --key:#FF6A00; --hi:#FFD400;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text);line-height:1.75;
+    font-family:"jf open 粉圓 2.1","GenSenRounded TW","Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+    -webkit-font-smoothing:antialiased;}
+  .wrap{max-width:860px;margin:0 auto;padding:0 20px;}
+
+  header{padding:60px 0 36px;border-bottom:1px solid var(--line);}
+  header .back{display:inline-block;color:var(--muted);font-size:.85em;margin-bottom:20px;border-bottom:1px solid transparent;}
+  header .back:hover{color:var(--key);}
+  header h1{font-size:2.1em;line-height:1.25;margin-bottom:14px;font-weight:800;}
+  header .meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px;}
+  header .meta span{border:1px solid var(--line);border-radius:22px;padding:5px 14px;font-size:.78em;color:var(--muted);}
+  header .meta span.k{border-color:var(--key);color:var(--key);}
+
+  section{padding:44px 0;border-bottom:1px solid var(--line);}
+  section:last-of-type{border-bottom:none;}
+  h2{font-size:1.45em;margin-bottom:8px;font-weight:800;}
+  h2 .n{color:var(--key);margin-right:12px;font-variant-numeric:tabular-nums;}
+  h3{font-size:1.05em;margin:26px 0 10px;font-weight:700;}
+  .lead{color:var(--muted);margin-bottom:22px;}
+  p{margin:12px 0;}
+  ul,ol{margin:12px 0 12px 24px;} li{margin-bottom:8px;}
+
+  .hero{background:var(--surface);border-radius:14px;padding:20px 22px;margin:20px 0;border-left:4px solid var(--hi);}
+  .hero b{color:var(--hi);}
+  .warn{background:rgba(255,106,0,.08);border-left:4px solid var(--key);border-radius:10px;padding:15px 20px;margin:18px 0;font-size:.94em;}
+  .danger{background:rgba(255,212,0,.07);border-left:4px solid var(--hi);border-radius:10px;padding:16px 20px;margin:18px 0;}
+  .danger .t{color:var(--hi);font-weight:800;margin-bottom:6px;}
+
+  .tw{overflow-x:auto;margin:18px 0;-webkit-overflow-scrolling:touch;}
+  table{width:100%;border-collapse:collapse;font-size:.9em;min-width:480px;}
+  th,td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top;}
+  th{color:var(--key);font-weight:700;white-space:nowrap;}
+
+  code{background:var(--bg2);border:1px solid var(--line);border-radius:5px;padding:1px 7px;font-size:.88em;color:var(--key);
+    font-family:"Cascadia Mono",Consolas,Menlo,monospace;word-break:break-all;}
+  pre{background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin:14px 0;
+    overflow-x:auto;font-size:.86em;line-height:1.7;-webkit-overflow-scrolling:touch;}
+  pre code{background:none;border:none;padding:0;color:var(--text);white-space:pre;word-break:normal;}
+  pre.say{border-left:4px solid var(--key);}
+  pre.say code{color:var(--hi);}
+
+  a{color:var(--key);text-decoration:none;border-bottom:1px solid rgba(255,106,0,.35);}
+  a:hover{border-bottom-color:var(--key);}
+  footer{padding:40px 0 60px;text-align:center;color:var(--muted);font-size:.8em;}
+  footer a{color:var(--muted);}
+  .src{display:block;margin-top:14px;font-size:.92em;color:var(--muted);line-height:1.6;}
+
+  @media(max-width:600px){
+    header{padding:40px 0 28px;} header h1{font-size:1.5em;}
+    section{padding:32px 0;} h2{font-size:1.2em;} .wrap{padding:0 16px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <a class="back" href="./">← 回研習大綱</a>
+    <h1>Apps Script ＋ clasp<br>連線指南</h1>
+    <p class="lead">第二天下午做<strong>作品④</strong> 用的。讓 AI 直接讀寫你的試算表腳本。</p>
+    <div class="meta">
+      <span class="k">全班主線</span><span>現場約 15 分鐘</span><span>免費</span><span>要用個人 Gmail</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+<section>
+  <h2>這是什麼</h2>
+  <p><strong>Apps Script</strong> 是 Google 內建的程式工具，可以直接讀寫你的 Google 試算表。<br>
+  <strong>clasp</strong> 是 Google 官方的命令列工具，讓 OpenCode 能幫你寫 Apps Script 程式並直接推上雲端。</p>
+  <p>結合之後：你講中文 → AI 寫程式 → 自動推到你的 Google 帳號 → 試算表就自動化了。</p>
+
+  <h3>為什麼不是「AI 給你程式碼、你自己貼上去」</h3>
+  <p>差別在<strong>「AI 看不看得到你線上那份程式碼」</strong>：</p>
+  <div class="tw">
+    <table>
+      <thead><tr><th></th><th>自己複製貼上</th><th>用 clasp</th></tr></thead>
+      <tbody>
+        <tr><td>AI 知道你線上的程式長怎樣嗎</td><td>❌ 不知道，你得貼給它看</td><td>✅ 自己 <code>pull</code> 下來讀</td></tr>
+        <tr><td>改一個地方</td><td>生程式 → 複製 → 切瀏覽器 → 貼上 → 存檔</td><td>講一句話，它改完自己推上去</td></tr>
+        <tr><td>改五次</td><td>來回貼五次</td><td>講五句話</td></tr>
+        <tr><td>程式碼在哪</td><td>只在雲端</td><td>也在你電腦上，可以進 GitHub</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>作品④ 現場一定會反覆調整，這個差別會被放大很多次。</p>
+</section>
+
+<section>
+  <h2>⚠️ 昨晚的功課：先打開 Apps Script API</h2>
+  <p class="lead">如果你昨晚已經做了，跳過這段。</p>
+  <ol>
+    <li>用<strong>個人 Gmail</strong> 登入 Google</li>
+    <li>打開 <a href="https://script.google.com/home/usersettings" target="_blank" rel="noopener">script.google.com/home/usersettings</a></li>
+    <li>把 <strong>「Google Apps Script API」</strong>的開關<strong>打開</strong></li>
+  </ol>
+  <div class="danger">
+    <div class="t">🔴 這個開關要 1–2 分鐘才生效</div>
+    所以才排在前一晚。<br>
+    現在才發現沒開？<strong>馬上開，然後先去做 L1 那段</strong>，等一下再回來做這裡。跟講師說一聲，助教會來看你。
+  </div>
+</section>
+
+<section>
+  <h2><span class="n">01</span>確認 Node 版本</h2>
+  <p>跟 OpenCode 說：</p>
+  <pre class="say"><code>幫我確認 Node.js 版本</code></pre>
+  <p>它會執行 <code>node --version</code>。<strong>要看到 <code>v22</code> 以上。</strong></p>
+  <ul>
+    <li>✅ 有看到 <code>v22</code>／<code>v24</code> 之類 → 直接跳到步驟 2</li>
+    <li>❌ 顯示 <code>v20</code>、<code>v18</code> 或「找不到指令」 → 跟 OpenCode 說「<strong>幫我安裝 Node.js LTS</strong>」，它會處理</li>
+  </ul>
+  <div class="warn">
+    第一天裝環境時（<code>00-env-setup</code> 懶人包）就已經裝過 Node 了，所以這一步多半是走個確認。
+  </div>
+</section>
+
+<section>
+  <h2><span class="n">02</span>clasp 登入</h2>
+  <p>跟 OpenCode 說：</p>
+  <pre class="say"><code>幫我執行 clasp 登入</code></pre>
+  <p>它會執行 <code>npx @google/clasp login</code> → 瀏覽器自動打開 → <strong>選你的個人 Gmail</strong> → 點「允許」→ 看到 <code>Successfully logged in</code>。</p>
+  <div class="warn">
+    <strong>為什麼用 <code>npx</code> 不用全域安裝？</strong><code>npx</code> 不用先裝、每次現抓，而且<strong>繞開 Windows 的執行原則限制</strong>。之後你如果會常用，再請 OpenCode 幫你 <code>npm install -g @google/clasp</code>，直接打 <code>clasp</code> 會快很多。
+  </div>
+</section>
+
+<section>
+  <h2><span class="n">03</span>確認真的成功了</h2>
+  <pre class="say"><code>幫我確認 clasp 登入狀態</code></pre>
+  <p>看到你的 Gmail 出現就成功了。</p>
+
+  <h3>卡住的話對照這張表</h3>
+  <div class="tw">
+    <table>
+      <thead><tr><th>你看到的</th><th>意思</th><th>怎麼辦</th></tr></thead>
+      <tbody>
+        <tr><td><code>admin_policy_enforced</code></td><td>你用到<strong>學校帳號</strong>了</td><td>執行 <code>npx @google/clasp logout</code>，重來一次改選個人 Gmail</td></tr>
+        <tr><td><code>User has not enabled the Apps Script API</code></td><td>開關沒開，或<strong>還沒生效</strong></td><td>回上面開開關，等 1–2 分鐘再試</td></tr>
+        <tr><td>「因為這個系統上已停用指令碼執行」</td><td>Windows 執行原則</td><td>跟 OpenCode 說一聲，它會處理</td></tr>
+        <tr><td><code>node: 找不到指令</code></td><td>沒裝 Node</td><td>回步驟 1</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p><strong>卡超過幾分鐘就舉手</strong>，不要一個人耗——助教會過來。</p>
+</section>
+
+<section>
+  <h2><span class="n">04</span>做出作品④</h2>
+  <p>登入成功之後，直接用中文說。以下是作品④ 的起手式：</p>
+  <pre class="say"><code>幫我用 clasp 建立一個綁定新試算表的 Apps Script 專案，
+試算表名稱是「課堂提問箱」。
+
+然後做一個網頁應用程式：
+- 學生用手機打開，可以填「座號」和「想問的問題」
+- 送出後資料存進試算表
+- 我自己打開網頁時可以看到所有人的提問
+
+做好之後幫我部署，給我網址和 QR Code。</code></pre>
+  <div class="danger">
+    <div class="t">🔒 資安底線照舊：只放座號，不放姓名</div>
+    這條不因為資料在你自己的 Google 帳號底下就放寬——<strong>你等一下就要把網址發給全班，那是一個公開網頁。</strong>
+  </div>
+</section>
+
+<section>
+  <h2><span class="n">05</span>你之後還可以這樣用</h2>
+
+  <h3>幫現有試算表寫自動化</h3>
+  <pre class="say"><code>我有一份 Google 試算表，網址是 https://docs.google.com/spreadsheets/d/XXXXX/edit
+幫我用 clasp 把它的腳本拉下來，然後寫一個 Apps Script：
+自動計算每個座號的總分和平均，把結果寫回試算表</code></pre>
+
+  <h3>做成儀表板</h3>
+  <pre class="say"><code>幫我把這個試算表部署成一個網頁應用，
+讓我在瀏覽器看到成績總覽、及格率、各科平均</code></pre>
+
+  <h3>定時自動執行</h3>
+  <pre class="say"><code>幫我在 Apps Script 裡加一個觸發器，
+每天早上 8 點自動把試算表資料備份到另一個工作表</code></pre>
+</section>
+
+<section>
+  <h2><span class="n">06</span>常見問題</h2>
+
+  <h3>要錢嗎？</h3>
+  <p><strong>不用。</strong>clasp 是 Google 官方免費工具，Apps Script 也是免費服務（每天有執行次數上限，一般班級用碰不到）。</p>
+
+  <h3>為什麼一定要個人 Gmail？</h3>
+  <p>學校的 Google Workspace 帳號預設會擋掉第三方工具授權，你會看到 <code>admin_policy_enforced</code>。<strong>這個錯誤你自己解不了</strong>——要學校的 Workspace 管理員進 Admin Console 把 clasp 的 OAuth Client ID 加白名單。用個人 Gmail 就完全沒這個問題。</p>
+
+  <h3>clasp 真的卡住了，作品④ 就做不出來嗎？</h3>
+  <p><strong>不會。</strong>還有一條退路：請 AI 直接把 <code>Code.gs</code> 和 <code>index.html</code> 的內容給你，你自己開 <a href="https://script.google.com" target="_blank" rel="noopener">script.google.com</a> 貼上、按部署。<strong>功能完全一樣</strong>，只是之後每次改都要重貼一次。</p>
+  <div class="hero">
+    <b>clasp 是效率升級，不是作品④ 的必要條件。</b>卡住就換路，不要耗在上面。
+  </div>
+
+  <h3>換電腦怎麼辦？</h3>
+  <p>新電腦要：確認有 Node 22+ → 執行一次 <code>npx @google/clasp login</code>。Apps Script API 那個開關是綁帳號的，不用再開。程式碼可以用 clasp 從雲端拉回來。</p>
+
+  <h3>clasp 跟 Supabase 有什麼差別？</h3>
+  <div class="tw">
+    <table>
+      <thead><tr><th></th><th>clasp ＋ Apps Script</th><th>Supabase</th></tr></thead>
+      <tbody>
+        <tr><td>用途</td><td>操作 Google 試算表</td><td>獨立的雲端資料庫</td></tr>
+        <tr><td>適合</td><td>成績單、點名表、提問箱</td><td>多人同時寫入、即時更新</td></tr>
+        <tr><td>課程定位</td><td><strong>全班主線</strong></td><td>進階選配</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p><strong>兩者互補。</strong>大部分教學情境試算表就夠——會需要 <a href="supabase.html">Supabase</a>，通常是因為「很多人同時送資料」。</p>
+
+  <h3>我看到的教學指令跟這裡不一樣</h3>
+  <p>clasp v3 改過一些指令名稱（例如 <code>open</code> 改成 <code>open-script</code>）。舊教學可能失效，以官方 <a href="https://github.com/google/clasp" target="_blank" rel="noopener">github.com/google/clasp</a> 為準，或直接問 OpenCode。</p>
+</section>
+
+<section>
+  <h2>下一步</h2>
+  <ol>
+    <li>完成作品④，把網址和 QR Code 發給隔壁同學互測</li>
+    <li>收工前記得 <code>push</code> 到 GitHub（上午已經設好了）</li>
+    <li>回學校後試著把一份現有試算表接上來</li>
+  </ol>
+  <p>卡住了直接跟 OpenCode 說：「我卡在 XXX，幫我看看」。</p>
+  <span class="src">本指南依 2026-07 查證的官方資料撰寫：clasp 官方 repo（Node.js &gt;= 22.0.0、npm 套件 <code>@google/clasp</code>、v3 指令更名）、Google Workspace <code>admin_policy_enforced</code> 需管理員於 Admin Console 白名單 OAuth Client ID、Apps Script API 使用者設定頁。</span>
+</section>
+
+</div>
+
+<footer>
+  <div class="wrap">
+    <a href="./">← 回研習大綱</a>　·　<a href="supabase.html">Supabase 指南</a><br><br>
+    三師爸 Sense Bar｜三天 AI Agent 實作工作坊<br>
+    課堂看板：<a href="https://padlet.com/mathruffian/ai-agent-t1sll0pnh4q4j27t" target="_blank" rel="noopener">padlet.com/mathruffian/ai-agent-t1sll0pnh4q4j27t</a>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -140,7 +140,7 @@
   <div class="warn">
     <strong>先跟你說一聲：</strong>第一天晚上會請大家花幾分鐘註冊<strong>兩個</strong>帳號——<strong>Netlify</strong> 和 <strong>GitHub</strong>——然後<strong>記得去信箱把兩封驗證信都按掉</strong>。<br>
     不是要給你功課，是先卡位——學校信箱有時候會延遲幾分鐘才收得到信，而<strong>第二天上午兩個都會用到</strong>。前一晚弄好，隔天你就不用坐在那邊等信。<br>
-    註冊完就好，<strong>不用做任何設定</strong>，其他的第二天上午一起弄。
+    註冊完就好，<strong>不用做任何設定</strong>，其他的第二天上午一起弄。<br><br>另外還有一個 <strong>30 秒</strong>的小動作：用個人 Gmail 登入後打開 <a href="https://script.google.com/home/usersettings" target="_blank" rel="noopener">Apps Script 設定頁</a>，把「Google Apps Script API」的開關打開。<strong>這個開關要一兩分鐘才生效，所以一定要前一晚做</strong>——第二天下午一開始就會用到。
   </div>
 </section>
 
@@ -181,7 +181,7 @@
     <img src="images/02-internal-tools.png" alt="Day 1 下午 內部工具">
     <div class="hd"><span class="no">Day 1 下午</span><span class="ti">內部工具</span></div>
     <p>不接任何外部服務，純粹用 AI 內建的手腳做事：上網找素材、讀你的教材、產出教案、整理一團亂的資料夾。中間會裝一包工具，裝完你會當場<strong>聽到電腦講中文</strong>。</p>
-    <div class="out"><div class="lbl">你會帶走</div>作品② — 一份可以直接拿去用的教材包<br><span style="color:var(--muted);font-size:.9em">回家功課：① 把「找素材」這條流程包成你的第一個技能　② 順手註冊 Netlify 和 GitHub、把兩封驗證信都按掉（明天上午都會用到）</span></div>
+    <div class="out"><div class="lbl">你會帶走</div>作品② — 一份可以直接拿去用的教材包<br><span style="color:var(--muted);font-size:.9em">回家功課：① 把「找素材」這條流程包成你的第一個技能　② 註冊 Netlify 和 GitHub、把兩封驗證信都按掉（明天上午用）　③ 打開 Apps Script API 開關（30 秒，明天下午用，要時間生效所以今晚先開）</span></div>
     <div class="tools"><span>文件處理工具</span><span>影音工具</span><span>語音合成</span><span>雲端硬碟</span></div>
   </div>
 
@@ -196,9 +196,9 @@
   <div class="day">
     <img src="images/04-database.png" alt="Day 2 下午 資料庫">
     <div class="hd"><span class="no">Day 2 下午</span><span class="ti">資料庫</span></div>
-    <p>先把前兩天的能力收成一個可以重複使用的技能，然後開始讓你的工具「記得住東西」。主線是用 <strong>Apps Script 做一個網頁應用程式，資料存進你自己的 Google 試算表</strong>——學生掃 QR Code 填，你在試算表裡直接看得到，不用另外學任何後台。<br>想做「幾十個人同時送、大螢幕即時長出來」的，可以再往上一階去碰 Supabase，那是<strong>選配路線</strong>，不是每個人都要走。這個半天你也會知道<strong>什麼時候根本不需要資料庫</strong>。<br>最後十分鐘是<strong>收工存檔</strong>：上午已經把 GitHub 接好了，所以這裡只要一句話就把今天的作品存上去。第三天上午我們會從那裡把它拉回來。</p>
+    <p>先把前兩天的能力收成一個可以重複使用的技能，然後開始讓你的工具「記得住東西」。主線是用 <strong>Apps Script 做一個網頁應用程式，資料存進你自己的 Google 試算表</strong>——學生掃 QR Code 填，你在試算表裡直接看得到，不用另外學任何後台。<br>我們會用 <strong>clasp</strong> 把試算表腳本接到 OpenCode，這樣 AI 可以直接讀你線上那份程式碼、改完自己推回去，不用你來回複製貼上。<a href="apps-script.html">連線指南在這裡</a>。<br>想做「幾十個人同時送、大螢幕即時長出來」的，可以再往上一階去碰 Supabase，那是<strong>選配路線</strong>，不是每個人都要走。這個半天你也會知道<strong>什麼時候根本不需要資料庫</strong>。<br>最後十分鐘是<strong>收工存檔</strong>：上午已經把 GitHub 接好了，所以這裡只要一句話就把今天的作品存上去。第三天上午我們會從那裡把它拉回來。</p>
     <div class="out"><div class="lbl">你會帶走</div>作品④ — 一個學生用手機就能填、資料存得住的課堂工具</div>
-    <div class="tools"><span>Apps Script 網頁應用程式</span><span>Google 試算表</span><span>QR Code</span><span>GitHub（收工存檔）</span><span>Supabase（選配）</span></div>
+    <div class="tools"><span>Apps Script ＋ clasp</span><span>Google 試算表</span><span>QR Code</span><span>GitHub（收工存檔）</span><span>Supabase（選配）</span></div>
   </div>
 
   <div class="day">
@@ -274,6 +274,7 @@
       <thead><tr><th>資源</th><th>什麼時候用得到</th><th>網址</th></tr></thead>
       <tbody>
         <tr><td><strong>課堂看板</strong></td><td>三天的所有資料都在上面，結束後不會關</td><td><a href="https://padlet.com/mathruffian/ai-agent-t1sll0pnh4q4j27t" target="_blank" rel="noopener">Padlet</a></td></tr>
+        <tr><td><strong>Apps Script ＋ clasp 連線指南</strong></td><td>第二天下午做作品④ 用的。含 Node 檢查、API 開關、clasp 登入，還有<strong>卡住時的退路</strong></td><td><a href="apps-script.html">看指南</a></td></tr>
         <tr><td><strong>Supabase 新手教師連線指南</strong></td><td>第二天下午的進階選配。從註冊到接進 OpenCode，含<strong>把表格上鎖</strong>那一步——不做那步等於開一個公開可讀的成績資料庫</td><td><a href="supabase.html">看指南</a></td></tr>
         <tr><td><strong>OpenCode 懶人包</strong></td><td>三天用到的每一項設定都有一包，回學校重裝就靠它</td><td><a href="https://github.com/mathruffian-dot/opencode-lazy-packs" target="_blank" rel="noopener">GitHub</a></td></tr>
         <tr><td><strong>OpenCode 官方下載頁</strong></td><td>主要工具。<strong>要重裝或裝到另一台電腦，從這裡抓</strong>——Windows／macOS／Linux 都有</td><td><a href="https://opencode.ai/download" target="_blank" rel="noopener">opencode.ai</a></td></tr>
