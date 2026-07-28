@@ -20,7 +20,7 @@ description: 把 Google Apps Script 接進 OpenCode（clasp 登入 → 建綁定
 
 ---
 
-## 🔴 五條硬性紅線
+## 🔴 六條硬性紅線
 
 ### 1. 一定要用個人 Gmail
 
@@ -190,3 +190,5 @@ npx @google/clasp open-web-app <deploymentId> --json
 - ❌ 不要用 `fetch` 打自己的 `/exec`（用 `google.script.run`）
 - ❌ 不要主動幫他建定時觸發器
 - ❌ 不要在使用者還沒確認「資料真的有進試算表」之前，就宣告完成
+- ❌ **不要自己拼網頁應用程式的網址**（`/macros/s/<scriptId>/exec` 一定是錯的），一律用 `open-web-app --json` 取得
+- ❌ 不要用 clasp v2 的舊指令名（`open`、`deploy`、`deployments`）

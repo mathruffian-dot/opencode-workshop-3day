@@ -213,6 +213,17 @@ https://raw.githubusercontent.com/mathruffian-dot/opencode-workshop-3day/main/sk
   <h3>為什麼一定要個人 Gmail？</h3>
   <p>學校的 Google Workspace 帳號預設會擋掉第三方工具授權，你會看到 <code>admin_policy_enforced</code>。<strong>這個錯誤你自己解不了</strong>——要學校的 Workspace 管理員進 Admin Console 把 clasp 的 OAuth Client ID 加白名單。用個人 Gmail 就完全沒這個問題。</p>
 
+  <h3>AI 給我的網址打開是「網頁不存在」</h3>
+  <p><strong>這是現場實際踩到的坑，不是你操作錯。</strong></p>
+  <p>clasp 裡有<strong>三種網址、三個不同的 ID</strong>：Apps Script 編輯器用 <code>scriptId</code>、綁定的試算表用 <code>parentId</code>、<strong>部署好的網頁應用程式用 <code>deploymentId</code></strong>。</p>
+  <div class="danger">
+    <div class="t">網頁應用程式的網址「組不出來」，只能跟 Google 要</div>
+    如果 AI 拿 <code>scriptId</code> 去拼成 <code>script.google.com/macros/s/&lt;scriptId&gt;/exec</code>，<strong>那個網址一定是 404</strong>。<br><br>
+    <strong>卡住的話，把這一句貼給它：</strong>
+    <pre class="say"><code>網址不要自己拼。用 clasp open-web-app 加上 deploymentId 和 --json，
+把它印出來的網址給我。</code></pre>
+  </div>
+
   <h3>clasp 真的卡住了，作品④ 就做不出來嗎？</h3>
   <p><strong>不會。</strong>還有一條退路：請 AI 直接把 <code>Code.gs</code> 和 <code>index.html</code> 的內容給你，你自己開 <a href="https://script.google.com" target="_blank" rel="noopener">script.google.com</a> 貼上、按部署。<strong>功能完全一樣</strong>，只是之後每次改都要重貼一次。</p>
   <div class="hero">
