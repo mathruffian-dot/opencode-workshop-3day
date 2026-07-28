@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GitHub 兩步驟驗證（2FA）設定指南｜三天 AI Agent 實作工作坊</title>
+<meta name="description" content="剛註冊 GitHub 被要求設 2FA？10 分鐘設好。最重要的是復原碼——掉了官方也救不回來。">
+<style>
+  :root{
+    --bg:#050505; --bg2:#0B0B0B; --surface:#202020; --line:#2E2E2E;
+    --text:#F5F7FA; --muted:#9AA0A6; --key:#FF6A00; --hi:#FFD400;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text);line-height:1.75;
+    font-family:"jf open 粉圓 2.1","GenSenRounded TW","Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+    -webkit-font-smoothing:antialiased;}
+  .wrap{max-width:860px;margin:0 auto;padding:0 20px;}
+
+  header{padding:60px 0 36px;border-bottom:1px solid var(--line);}
+  header .back{display:inline-block;color:var(--muted);font-size:.85em;margin-bottom:20px;border-bottom:1px solid transparent;}
+  header .back:hover{color:var(--key);}
+  header h1{font-size:2.1em;line-height:1.25;margin-bottom:14px;font-weight:800;}
+  header .meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px;}
+  header .meta span{border:1px solid var(--line);border-radius:22px;padding:5px 14px;font-size:.78em;color:var(--muted);}
+  header .meta span.k{border-color:var(--key);color:var(--key);}
+
+  section{padding:44px 0;border-bottom:1px solid var(--line);}
+  section:last-of-type{border-bottom:none;}
+  h2{font-size:1.45em;margin-bottom:8px;font-weight:800;}
+  h2 .n{color:var(--key);margin-right:12px;font-variant-numeric:tabular-nums;}
+  h3{font-size:1.05em;margin:26px 0 10px;font-weight:700;}
+  .lead{color:var(--muted);margin-bottom:22px;}
+  p{margin:12px 0;}
+  ul,ol{margin:12px 0 12px 24px;} li{margin-bottom:8px;}
+
+  .hero{background:var(--surface);border-radius:14px;padding:20px 22px;margin:20px 0;border-left:4px solid var(--hi);}
+  .hero b{color:var(--hi);}
+  .warn{background:rgba(255,106,0,.08);border-left:4px solid var(--key);border-radius:10px;padding:15px 20px;margin:18px 0;font-size:.94em;}
+  .danger{background:rgba(255,212,0,.07);border-left:4px solid var(--hi);border-radius:10px;padding:16px 20px;margin:18px 0;}
+  .danger .t{color:var(--hi);font-weight:800;margin-bottom:6px;}
+
+  .tw{overflow-x:auto;margin:18px 0;-webkit-overflow-scrolling:touch;}
+  table{width:100%;border-collapse:collapse;font-size:.9em;min-width:480px;}
+  th,td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top;}
+  th{color:var(--key);font-weight:700;white-space:nowrap;}
+
+  code{background:var(--bg2);border:1px solid var(--line);border-radius:5px;padding:1px 7px;font-size:.88em;color:var(--key);
+    font-family:"Cascadia Mono",Consolas,Menlo,monospace;word-break:break-all;}
+  pre{background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin:14px 0;
+    overflow-x:auto;font-size:.86em;line-height:1.7;-webkit-overflow-scrolling:touch;}
+  pre code{background:none;border:none;padding:0;color:var(--text);white-space:pre;word-break:normal;}
+  pre.say{border-left:4px solid var(--key);}
+  pre.say code{color:var(--hi);}
+
+  a{color:var(--key);text-decoration:none;border-bottom:1px solid rgba(255,106,0,.35);}
+  a:hover{border-bottom-color:var(--key);}
+  footer{padding:40px 0 60px;text-align:center;color:var(--muted);font-size:.8em;}
+  footer a{color:var(--muted);}
+  .src{display:block;margin-top:14px;font-size:.92em;color:var(--muted);line-height:1.6;}
+
+  @media(max-width:600px){
+    header{padding:40px 0 28px;} header h1{font-size:1.5em;}
+    section{padding:32px 0;} h2{font-size:1.2em;} .wrap{padding:0 16px;}
+  }
+</style>
+</head><body>
+
+<header>
+  <div class="wrap">
+    <a class="back" href="./">← 回研習大綱</a>
+    <h1>GitHub 兩步驟驗證<br>（2FA）設定指南</h1>
+    <p class="lead">剛註冊 GitHub、被要求設 2FA？跟著做，10 分鐘。</p>
+    <div class="meta">
+      <span class="k">回家再做就好</span><span>約 10 分鐘</span><span>需要手機</span><span>AI 幫不了你</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+<section>
+  <h2>先講三件事</h2>
+
+  <h3>一、這個躲不掉</h3>
+  <p>GitHub 對「會放程式碼的帳號」<strong>強制要求 2FA</strong>。而且 <strong>2026-09-02 起，連停用的選項都會消失</strong>。早晚要設，不如一次設好。</p>
+
+  <h3>二、但研習現場可以先跳過</h3>
+  <p>新帳號有 <strong>45 天的設定期</strong>（再加 7 天寬限）。研習當天看到那個畫面，<strong>先按跳過</strong>，把時間留給課程，回家再照這份做。</p>
+
+  <h3>🔴 三、最重要的一件事：復原碼</h3>
+  <div class="danger">
+    <div class="t">設定過程會給你一組「復原碼」。GitHub 官方文件寫得很白：</div>
+    <strong>遺失 2FA 且沒有復原碼時，GitHub Support 無法幫你恢復帳號存取。</strong><br><br>
+    意思是——<strong>手機掉了、又沒存復原碼，那個帳號就永久打不開了，官方也救不回來。</strong><br>
+    這份指南裡<strong>只有這一件事是不可逆的</strong>，其他都可以重來。
+  </div>
+</section>
+
+<section>
+  <h2>2FA 到底是什麼</h2>
+  <p>一句話：<strong>密碼是「你知道的東西」，2FA 是「你有的東西」。</strong></p>
+  <p>有人偷到你的密碼，但沒有你的手機，還是進不去。這就是它存在的理由。</p>
+
+  <h3>⚠️ 它跟研習時打的那組「8 碼」不是同一件事</h3>
+  <p>很多人在這裡搞混：</p>
+  <div class="tw">
+    <table>
+      <thead><tr><th></th><th>8 碼（裝置碼）</th><th>2FA 碼</th></tr></thead>
+      <tbody>
+        <tr><td>誰產生的</td><td>電腦上的 <code>gh</code> 產生</td><td><strong>你手機上的 App</strong> 產生</td></tr>
+        <tr><td>長相</td><td><code>A1B2-C3D4</code>（英數字，有短橫線）</td><td><strong>6 位純數字</strong>，每 30 秒換一次</td></tr>
+        <tr><td>在證明什麼</td><td>「這台電腦是我授權的」</td><td>「現在要登入的是我本人」</td></tr>
+        <tr><td>什麼時候遇到</td><td>接 GitHub 到電腦時</td><td><strong>每次登入 github.com 網頁時</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="hero">順序上，<b>2FA 是「進門」，8 碼是「進門之後才做的事」。</b></div>
+</section>
+
+<section>
+  <h2>選哪一種方式</h2>
+  <div class="tw">
+    <table>
+      <thead><tr><th>方式</th><th>建議</th><th>為什麼</th></tr></thead>
+      <tbody>
+        <tr><td><strong>驗證器 App（TOTP）</strong></td><td>⭐ <strong>選這個</strong></td><td>GitHub 官方明講「<strong>強烈建議用 TOTP，不要用簡訊</strong>」。免費、不綁電話號碼、<strong>沒網路也能用</strong></td></tr>
+        <tr><td>簡訊（SMS）</td><td>不建議</td><td>換門號就麻煩，出國收不到，官方也不推</td></tr>
+        <tr><td>安全金鑰</td><td>不用</td><td>要另外買實體裝置</td></tr>
+        <tr><td>Passkey</td><td>之後再說</td><td>可以用，但仍建議先有一個 App 當備援</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <h2><span class="n">00</span>手機先裝好 App</h2>
+  <p class="lead">⭐ 這一步決定你將來換手機會不會出事。</p>
+  <p>到手機的 App Store／Play 商店搜尋 <strong>「Google Authenticator」</strong>，安裝。</p>
+  <p><strong>裝好之後做一件很重要的事</strong>：打開 App → 點右上角頭像 → <strong>登入你的 Google 帳號</strong>。</p>
+  <div class="hero">
+    💡 <b>為什麼要登入？</b>因為這樣你的驗證碼會備份到 Google 帳號。將來換手機，新手機裝好 App 一登入，<b>全部自動回來</b>。<br>
+    沒登入的話，手機掉了就只能靠復原碼。
+  </div>
+  <div class="warn">
+    老實說一個代價：這個雲端備份<strong>沒有端對端加密</strong>。對「放教學材料的 GitHub 帳號」來說這個取捨划算；如果你之後要拿它管理很敏感的東西，再研究別的 App。<br><br>
+    不想用 Google 的也可以，<strong>任何 TOTP App 都通用</strong>（Microsoft Authenticator、Authy、1Password⋯⋯），原理一樣。
+  </div>
+</section>
+
+<section>
+  <h2><span class="n">01</span>打開 GitHub 的設定頁</h2>
+  <p>電腦瀏覽器登入 GitHub → 右上角頭像 → <strong>Settings</strong> → 左邊選 <strong>Password and authentication</strong></p>
+</section>
+
+<section>
+  <h2><span class="n">02</span>開始設定</h2>
+  <p>找到 <strong>Enable two-factor authentication</strong>，點下去。</p>
+</section>
+
+<section>
+  <h2><span class="n">03</span>掃 QR Code</h2>
+  <p>畫面會出現一個 QR Code。</p>
+  <p>拿手機打開 Google Authenticator → 點右下角 <strong>＋</strong> → 選 <strong>掃描 QR 圖碼</strong> → 對準螢幕。</p>
+  <div class="warn">掃不到？畫面上有 <strong>setup key</strong>（一長串英數字），可以改用「輸入設定金鑰」手動打進去。</div>
+</section>
+
+<section>
+  <h2><span class="n">04</span>輸入 6 位數字</h2>
+  <p>App 裡會出現一組 6 位數字（每 30 秒換一次）。把它打進 GitHub 的欄位。</p>
+  <div class="warn">⏰ <strong>看到數字快變色就等下一組</strong>，不要打到一半過期。</div>
+</section>
+
+<section>
+  <h2><span class="n">05</span>🔴 復原碼——千萬不要跳過</h2>
+  <p>輸入正確之後，GitHub 會給你一組<strong>復原碼</strong>。</p>
+  <div class="danger">
+    <div class="t">注意：它不會自動幫你存，你必須自己主動下載。</div>
+    <strong>請至少存兩個地方</strong>，而且<strong>不要都存在同一支手機裡</strong>——手機掉了就兩個一起沒。
+  </div>
+  <div class="tw">
+    <table>
+      <thead><tr><th>存哪裡</th><th>怎麼做</th></tr></thead>
+      <tbody>
+        <tr><td>☁️ <strong>雲端硬碟</strong></td><td>下載的檔案丟到 Google 雲端硬碟，開一個資料夾叫「重要帳號」</td></tr>
+        <tr><td>🖨️ <strong>印出來</strong></td><td>印一張紙，跟你的重要證件放一起</td></tr>
+        <tr><td>🔑 密碼管理器</td><td>有在用的話，存進去</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>最後勾選 <strong>「I have saved my recovery codes」</strong>，完成。</p>
+</section>
+
+<section>
+  <h2>換手機怎麼辦</h2>
+  <div class="tw">
+    <table>
+      <thead><tr><th>情況</th><th>怎麼救</th></tr></thead>
+      <tbody>
+        <tr><td><strong>App 有登入 Google 帳號</strong>（第 00 步有做）</td><td>新手機裝好 App、登入同一個 Google 帳號 → <strong>驗證碼自動回來</strong></td></tr>
+        <tr><td>沒登入，但<strong>有復原碼</strong></td><td>用復原碼登入 GitHub，然後重新設定一次 2FA</td></tr>
+        <tr><td>沒登入，<strong>也沒有復原碼</strong></td><td>❌ <strong>帳號回不去了，官方也救不了。</strong>只能重開一個新帳號</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="hero">第 00 步和第 05 步存在的意義，<b>就是不要走到第三種。</b></div>
+</section>
+
+<section>
+  <h2>常見問題</h2>
+
+  <h3>6 位數字一直說錯</h3>
+  <p><strong>九成是手機時間不準。</strong>TOTP 是依「現在幾點」算出來的，手機時間差幾十秒就會全錯。<br>
+  手機 → 設定 → 日期與時間 → <strong>打開「自動設定」</strong>，然後再試一次。</p>
+
+  <h3>每次登入都要拿手機打嗎？</h3>
+  <p>登入時勾 <strong>「Remember this device」</strong>（記住這台裝置），常用的電腦就不用每次打。</p>
+
+  <h3>手機沒網路能用嗎？</h3>
+  <p><strong>可以。</strong>驗證碼是手機自己依時間算出來的，不需要網路——這也是它比簡訊好的原因之一。</p>
+
+  <h3>一定要用 Google 的 App 嗎？</h3>
+  <p>不用。任何 TOTP App 都相容，換一個也是掃同一個 QR Code。</p>
+
+  <h3>復原碼用掉了怎麼辦？</h3>
+  <p>每組只能用一次。用掉幾個之後，到 <strong>Settings → Password and authentication</strong> 可以重新產生一整組新的（舊的會全部失效，記得重存）。</p>
+
+  <h3>我可以之後把 2FA 關掉嗎？</h3>
+  <p><strong>2026-09-02 之前可以；之後不行了。</strong>所以現在設好，反而省事。</p>
+</section>
+
+<section>
+  <h2>設完之後的自我檢查</h2>
+  <ul>
+    <li>手機上的 App 有登入 Google 帳號（換手機的保險）</li>
+    <li>復原碼<strong>存了至少兩個地方</strong>，其中一個不在手機上</li>
+    <li>試著登出 GitHub 再登入一次，確認流程你走得順</li>
+  </ul>
+  <div class="hero">
+    第三項做完，你就真的會了。<br>
+    <b>研習隔天要接 GitHub 時，瀏覽器保持登入狀態，現場只剩貼個 8 碼、按一下 Authorize，幾十秒的事。</b>
+  </div>
+  <span class="src">本指南依 2026-07 查證的 GitHub 官方文件撰寫：2FA 支援 TOTP／簡訊／安全金鑰／Passkey，官方明確建議 TOTP 而非簡訊；復原碼須主動下載、且為完成設定的必要步驟；官方明載遺失 2FA 與復原碼時 GitHub Support 無法恢復帳號存取；新帳號有 45 天設定期與 7 天寬限期；2026-09-02 起不再提供停用 2FA 的選項。Google Authenticator 自 2023-04 起支援 Google 帳號雲端同步（無端對端加密）。</span>
+</section>
+
+</div>
+
+<footer>
+  <div class="wrap">
+    <a href="./">← 回研習大綱</a>　·　<a href="apps-script.html">Apps Script 指南</a><br><br>
+    三師爸 Sense Bar｜三天 AI Agent 實作工作坊<br>
+    課堂看板：<a href="https://padlet.com/mathruffian/ai-agent-t1sll0pnh4q4j27t" target="_blank" rel="noopener">padlet.com/mathruffian/ai-agent-t1sll0pnh4q4j27t</a>
+  </div>
+</footer>
+
+</body>
+</html>
