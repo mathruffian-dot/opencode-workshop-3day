@@ -47,7 +47,12 @@ description: 把 Google Apps Script 接進 OpenCode（clasp 登入 → 建綁定
 試算表欄位不要有學生真名。使用者提供的資料裡有姓名欄，**主動指出並建議移除**。
 作品④ 的網址等一下要發給全班，那是公開網頁。
 
-### 5. 不要覆蓋既有的 clasp 專案
+### 5. 網頁應用程式的網址一律用 `open-web-app --json` 取得
+
+**不准自己拼網址。** 詳見步驟 5——`scriptId`、`parentId`、`deploymentId` 是三個不同的東西，
+拼錯的結果是「網頁不存在」，而且看起來像部署失敗，會把你帶去修錯的地方。
+
+### 6. 不要覆蓋既有的 clasp 專案
 
 執行 `clasp create` 前先確認當前資料夾**沒有** `.clasp.json`。有的話先問使用者這是不是他要接的專案，不要直接蓋掉。
 
@@ -94,7 +99,43 @@ npx @google/clasp login --status
 
 ### 5. 部署為網頁應用程式
 
-部署後拿到 `.../exec` 網址，**產生 QR Code** 給他。
+#### 🔴 網址不能自己組——這是現場實際踩到的坑
+
+**症狀**：agent 給出的網址打開是「網頁不存在」或連到錯誤的頁面。
+
+**原因**：clasp 裡有**三種網址、三個不同的 ID**，很容易拿錯：
+
+| 要開什麼 | 指令 | 網址來源 | 用哪個 ID |
+|---|---|---|---|
+| Apps Script 編輯器 | `clasp open-script` | `script.google.com/d/<id>/edit` | **scriptId** |
+| 綁定的試算表 | `clasp open-container` | `drive.google.com/open?id=<id>` | **parentId** |
+| **部署好的網頁應用程式** | `clasp open-web-app <id>` | 🔴 **API 回傳的 `webApp.url`** | **deploymentId** |
+
+> 🔴 **網頁應用程式的網址「組不出來」，只能跟 API 要。**
+> clasp 原始碼裡**沒有任何 `/macros/s/...` 的網址範本**——它一律是
+> `deploymentId → 打 API 拿 entryPoints → 找 entryPointType === 'WEB_APP' → 讀出 webApp.url`。
+>
+> **所以絕對不要拿 `.clasp.json` 裡的 `scriptId` 去拼 `https://script.google.com/macros/s/<scriptId>/exec`。**
+> 那個 ID 是錯的，拼出來一定是 404。這正是現場「網頁不存在」的來源。
+
+#### 正確做法
+
+```powershell
+npx @google/clasp create-deployment --description "課堂提問箱"
+```
+
+從輸出取得 **deploymentId**，然後：
+
+```powershell
+npx @google/clasp open-web-app <deploymentId> --json
+```
+
+`--json` 是**全域旗標**，會把真正的網址印成 JSON 給你讀。**用它印出來的網址，不要自己拼。**
+
+> 拿不到 deploymentId 就先 `npx @google/clasp list-deployments`。
+> 如果回 `No web app entry point found`，代表這個部署不是網頁應用程式類型——回去確認部署設定。
+
+拿到正確網址之後，**產生 QR Code** 給他。
 
 ⚠️ 首次部署會跳授權，**要先跟他說**：
 
@@ -115,7 +156,9 @@ npx @google/clasp login --status
 | 「因為這個系統上已停用指令碼執行」 | Windows 執行原則 | 用 `npx` 而非全域安裝即可繞開；若已全域安裝，用 `Set-ExecutionPolicy -Scope Process -ExecutionPolicy RemoteSigned` |
 | 「Google 尚未驗證這個應用程式」 | 正常，自己的腳本 | 引導：進階 → 前往〈專案名〉（不安全）→ 允許 |
 | `node: 找不到指令` | 沒裝 Node | 回前置檢查 |
-| 指令名稱找不到 | clasp v3 改過指令名（`open` → `open-script` 等） | 以 <https://github.com/google/clasp> 為準 |
+| 指令名稱找不到 | **clasp v3 把指令全改名了**：`open`→`open-script`、`deploy`→`create-deployment`、`deployments`→`list-deployments`、另有 `open-container`、`open-web-app` | 用 v3 的名字。舊教學與舊記憶都是 v2 的，照著下會先撞「指令不存在」然後開始亂試 |
+| **給出去的網址打開是「網頁不存在」** | 🔴 **拿 `scriptId` 去拼 `/macros/s/.../exec` 了。**網頁應用程式的網址只能跟 API 要 | `clasp open-web-app <deploymentId> --json`，用它印出來的網址（見步驟 5）|
+| `No web app entry point found` | 這個部署不是網頁應用程式類型 | 回去確認部署時有選「網頁應用程式」|
 
 **同一個錯誤重試兩次還不過 → 走紅線 3 的退路，不要繼續耗。**
 
